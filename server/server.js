@@ -877,15 +877,16 @@ const hasCreatedAssetsForQuantity = (item, quantity) => getStoredAssetNumbers(it
 
 const processedStoreHasItem = (store, key, quantity = 0) => {
   const item = store.items?.[key]
-  return item?.status === 'success' || hasCreatedAssetsForQuantity(item, quantity)
+  return item?.status === 'success'
 }
 
 const processedStoreItemStatus = (store, key, quantity = 0) => {
   const item = store.items?.[key]
   if (!item) return 'Pending'
-  if (item.status === 'success' || item.status === 'assets-created' || hasCreatedAssetsForQuantity(item, quantity)) return 'Asset Already Created'
+  if (item.status === 'success') return 'Goods Issue Posted'
+  if (item.status === 'assets-created' || hasCreatedAssetsForQuantity(item, quantity)) return 'Assets Created - Posting Pending'
   if (item.status === 'failed') return 'Failed'
-  return item.status || 'Asset Already Created'
+  return item.status || 'Pending'
 }
 
 const buildGrnMonitorRow = async (item, store) => {
@@ -927,7 +928,7 @@ const buildGrnMonitorRow = async (item, store) => {
     storageLocation: String(item.StorageLocation || ''),
     postingDate: getItemPostingDate(item),
     status: productError ? 'Failed' : processedStoreItemStatus(store, key, quantity),
-    error: productError || (hasCreatedAssetsForQuantity(processedItem, quantity) ? '' : processedItem?.error || ''),
+    error: productError || (processedItem?.status === 'success' ? '' : processedItem?.error || ''),
     processed: processedItem,
   }
 }
