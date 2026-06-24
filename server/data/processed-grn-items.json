@@ -1,0 +1,460 @@
+{
+  "items": {
+    "5000000063/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000063",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "73",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "updatedAt": "2026-06-23T11:04:52.315Z",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC501E0E006A3A68536FB08",
+            "timestamp": "20260623110452.1874350",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='73',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='73',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='73',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='73',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 73 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='73',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782172800000)/",
+        "DocumentDate": "/Date(1782172800000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "73",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "50000075",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "D11"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "73",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "50000076",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "D12"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "73",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "50000077",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "D13"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "73",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "50000078",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "D14"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "73",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "50000079",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "D15"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "assetNumbers": [
+        "50000075",
+        "50000076",
+        "50000077",
+        "50000078",
+        "50000079"
+      ],
+      "serialNumbers": [
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D15"
+      ],
+      "partialResult": {
+        "assetNumbers": [
+          "50000075",
+          "50000076",
+          "50000077",
+          "50000078",
+          "50000079"
+        ],
+        "serialNumbers": [
+          "D11",
+          "D12",
+          "D13",
+          "D14",
+          "D15"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "error": "SAP request failed for /sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod?%24filter=Material+eq+%2773%27+and+Plant+eq+%27IN07%27+and+StorageLocation+eq+%27IN07%27&%24format=json. You do not have start authorization for R3TR IWSV API_MATERIAL_STOCK_SRV             0001, return code 4 | User does not have the sufficient authorizations"
+      }
+    },
+    "5000000062/2026/1": {
+      "status": "success",
+      "source": "scheduler",
+      "materialDocument": "5000000062",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "67",
+      "updatedAt": "2026-06-23T10:54:39.068Z",
+      "assetNumbers": [
+        "50000045",
+        "50000080",
+        "50000081",
+        "50000082",
+        "50000083",
+        "50000084"
+      ],
+      "serialNumbers": [
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26"
+      ],
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 6,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "error": "SAP request failed for /sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod?%24filter=Material+eq+%2767%27+and+Plant+eq+%27IN07%27+and+StorageLocation+eq+%27IN07%27&%24format=json. You do not have start authorization for R3TR IWSV API_MATERIAL_STOCK_SRV             0001, return code 4 | User does not have the sufficient authorizations"
+      },
+      "productGroup": "YBFA07",
+      "assetClass": "3100",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000045')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000045')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000045",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782172800000)/",
+          "PostingDate": "/Date(1782172800000)/",
+          "CreationDate": "/Date(1782172800000)/",
+          "CreationTime": "PT10H54M35S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    },
+    "5000000064/2026/1": {
+      "status": "success",
+      "source": "scheduler",
+      "materialDocument": "5000000064",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "75",
+      "updatedAt": "2026-06-23T10:44:28.089Z",
+      "assetNumbers": [
+        "50000069",
+        "50000070",
+        "50000071",
+        "50000072",
+        "50000073",
+        "50000074"
+      ],
+      "serialNumbers": [
+        "AP01",
+        "AP02",
+        "AP03",
+        "AP04",
+        "AP05",
+        "AP06"
+      ],
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 6,
+      "productGroup": "YBFA07",
+      "assetClass": "3100",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000044')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000044')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000044",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782172800000)/",
+          "PostingDate": "/Date(1782172800000)/",
+          "CreationDate": "/Date(1782172800000)/",
+          "CreationTime": "PT10H44M21S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    },
+    "5000000065/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "50000085",
+        "50000086",
+        "50000087",
+        "50000088",
+        "50000089",
+        "50000090"
+      ],
+      "serialNumbers": [
+        "AB1",
+        "AB2",
+        "AB3",
+        "AB4",
+        "AB5",
+        "AB6"
+      ],
+      "material": "79",
+      "materialDocument": "5000000065",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-23T11:17:35.078Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 6,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA07",
+      "assetClass": "3100",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000046')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000046')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000046",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782172800000)/",
+          "PostingDate": "/Date(1782172800000)/",
+          "CreationDate": "/Date(1782172800000)/",
+          "CreationTime": "PT11H17M31S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    },
+    "5000000066/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "20000018",
+        "20000019",
+        "20000020",
+        "20000021",
+        "20000022"
+      ],
+      "serialNumbers": [
+        "EXVTR1",
+        "EXVTR2",
+        "EXVTR3",
+        "EXVTR4",
+        "EXVTR5"
+      ],
+      "material": "80",
+      "materialDocument": "5000000066",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-23T11:27:34.956Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 5,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA05",
+      "assetClass": "2000",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000047')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000047')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000047",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782172800000)/",
+          "PostingDate": "/Date(1782172800000)/",
+          "CreationDate": "/Date(1782172800000)/",
+          "CreationTime": "PT11H27M30S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    }
+  }
+}

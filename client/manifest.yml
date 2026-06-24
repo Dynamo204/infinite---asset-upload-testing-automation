@@ -1,0 +1,10 @@
+
+applications:
+  - name: asset-automation-frontend
+    path: dist
+    memory: 100M
+    disk_quota: 256M
+    instances: 1
+
+    buildpacks:
+      - staticfile_buildpack

@@ -1,0 +1,15 @@
+---
+applications:
+  - name: asset-automation
+    path: .
+    memory: 200M
+    disk_quota: 256M
+    instances: 1
+
+    buildpacks:
+      - nodejs_buildpack
+
+    command: node server.js
+
+    env:
+      NODE_ENV: production

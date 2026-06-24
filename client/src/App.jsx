@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+const API_BASE_URL =
+  'https://asset-automation.cfapps.eu10-005.hana.ondemand.com'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const initialGoodsIssue = {
@@ -6,7 +8,7 @@ const initialGoodsIssue = {
   GoodsMovementCode: '03',
   PostingDate: '',
   DocumentDate: '',
-  MaterialDocumentHeaderText: 'Goods Issue to Asset',
+  MaterialDocumentHeaderText: '',
   Material: '',
   Plant: 'IN07',
   StorageLocation: 'IN07',
@@ -19,7 +21,7 @@ const initialGoodsIssue = {
 
 const initialAsset = {
   CompanyCode: '1000',
-  AssetClass: '3300',
+  AssetClass: '3100',
   _General: {
     FixedAssetDescription: 'Office equipments - Others',
     AssetAdditionalDescription: 'Office equipments - Others',
@@ -86,6 +88,49 @@ const Payload = ({ title, value }) => (
   </details>
 )
 
+const formatDateTime = (value) => {
+  if (!value) return ''
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString()
+}
+
+const formatInventoryBalance = (balance) => {
+  if (!balance) return '-'
+  if (balance.error || balance.unavailable) return 'Not available'
+  if (balance.quantity === null || balance.quantity === undefined) return '-'
+  return `${balance.quantity} ${balance.unit || ''}`.trim()
+}
+
+const statusClass = (status) => {
+  if (status === 'Pending') return 'pending'
+  if (status === 'Failed') return 'failed'
+  return 'done'
+}
+
+const statusLabel = (status) => {
+  if (status === 'Asset Already Exists') return 'Asset Already Created'
+  return status
+}
+
+const SerialAssetList = ({ pairs = [], assetNumbers = [] }) => {
+  const rows = pairs.length
+    ? pairs
+    : assetNumbers.map((assetNumber, index) => ({ serialNumber: `#${index + 1}`, assetNumber }))
+
+  if (!rows.length) return <span className="muted">No asset numbers yet.</span>
+
+  return (
+    <div className="asset-pairs">
+      {rows.map((pair, index) => (
+        <span key={`${pair.serialNumber || index}-${pair.assetNumber || 'pending'}`}>
+          <b>{pair.serialNumber}</b>
+          {pair.assetNumber || 'Pending'}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState('goods')
   const [goodsIssue, setGoodsIssue] = useState(initialGoodsIssue)
@@ -95,69 +140,98 @@ function App() {
   const [errorDetail, setErrorDetail] = useState(null)
   const [resumeAssetNumbers, setResumeAssetNumbers] = useState([])
   const [grnLoading, setGrnLoading] = useState(false)
+  const [todayGrns, setTodayGrns] = useState([])
+  const [automaticallyProcessed, setAutomaticallyProcessed] = useState([])
+  const [bulkResult, setBulkResult] = useState(null)
+  const [monitorLoading, setMonitorLoading] = useState(false)
+  const [bulkProcessing, setBulkProcessing] = useState(false)
 
   const assetNumbers = useMemo(() => result?.assetNumbers || [], [result])
   const serialNumbers = useMemo(() => parseSerialNumbers(goodsIssue.SerialNumbers), [goodsIssue.SerialNumbers])
 
-  useEffect(() => {
-    if (!goodsIssue.GrnNumber.trim()) return undefined
+  const applyGrnDetails = (body) => {
+    setGoodsIssue((current) => ({
+      ...current,
+      PostingDate: body.postingDate,
+      DocumentDate: body.documentDate,
+      Material: body.material,
+      Plant: body.plant,
+      StorageLocation: body.storageLocation,
+      EntryUnit: body.entryUnit,
+      QuantityInEntryUnit: String(body.quantity),
+      SerialNumbers: body.serialNumbers.join('\n'),
+    }))
+    setAsset((current) => ({
+      ...current,
+      _General: { ...current._General, AssetSerialNumber: body.serialNumbers[0] || '' },
+      _Ledger: [{ ...current._Ledger[0], AssetCapitalizationDate: body.postingDateISO }],
+    }))
+  }
 
-    const controller = new AbortController()
-    const timer = setTimeout(async () => {
-      setGrnLoading(true)
-      try {
-        const response = await fetch('/api/grn-details', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ grnNumber: goodsIssue.GrnNumber }),
-          signal: controller.signal,
-        })
-        const body = await response.json()
-        if (!response.ok) {
-          const message = response.status === 404
-            ? 'The GRN API is not available. Restart the app with npm run dev.'
-            : body.error || 'Could not fetch GRN details.'
-          throw new Error(message)
-        }
-
-        setGoodsIssue((current) => ({
-          ...current,
-          PostingDate: body.postingDate,
-          DocumentDate: body.documentDate,
-          Material: body.material,
-          Plant: body.plant,
-          StorageLocation: body.storageLocation,
-          EntryUnit: body.entryUnit,
-          QuantityInEntryUnit: String(body.quantity),
-          SerialNumbers: body.serialNumbers.join('\n'),
-        }))
-        setAsset((current) => ({
-          ...current,
-          _General: { ...current._General, AssetSerialNumber: body.serialNumbers[0] || '' },
-          _Ledger: [{ ...current._Ledger[0], AssetCapitalizationDate: body.postingDateISO }],
-        }))
-        setStatus({ type: 'success', message: `Loaded GRN ${body.grnNumber}: ${body.quantity} serial-managed item(s).` })
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          setStatus({ type: 'warning', message: error.message })
-        }
-      } finally {
-        if (!controller.signal.aborted) setGrnLoading(false)
-      }
-    }, 400)
-
-    return () => {
-      clearTimeout(timer)
-      controller.abort()
+  const getGrn = async () => {
+    if (!goodsIssue.GrnNumber.trim()) {
+      setStatus({ type: 'warning', message: 'Enter a GRN number before fetching details.' })
+      return
     }
-  }, [goodsIssue.GrnNumber])
+
+    setGrnLoading(true)
+    try {
+      //const response = await fetch('/api/grn-details', {
+      const response = await fetch(`${API_BASE_URL}/api/grn-details`, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ grnNumber: goodsIssue.GrnNumber }),
+})
+      const body = await response.json()
+      if (!response.ok) {
+        throw new Error(body.error || 'Could not fetch GRN details.')
+      }
+
+      applyGrnDetails(body)
+      setStatus({ type: 'success', message: `Loaded GRN ${body.grnNumber}: ${body.quantity} serial-managed item(s).` })
+    } catch (error) {
+      setStatus({ type: 'warning', message: error.message })
+    } finally {
+      setGrnLoading(false)
+    }
+  }
+
+  const getTodayGrns = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setMonitorLoading(true)
+    try {
+      //const response = await fetch('/api/today-grns', {
+      const response = await fetch(`${API_BASE_URL}/api/today-grns`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      })
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.error || 'Could not fetch today GRNs.')
+      setTodayGrns(body.items || [])
+      setAutomaticallyProcessed(body.automaticallyProcessed || [])
+      if (!silent) {
+        setStatus({ type: 'success', message: `Loaded ${body.items?.length || 0} GRN item(s) for today.` })
+      }
+    } catch (error) {
+      if (!silent) setStatus({ type: 'error', message: error.message })
+    } finally {
+      if (!silent) setMonitorLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    const initialTimer = window.setTimeout(() => getTodayGrns({ silent: true }), 0)
+    const refreshTimer = window.setInterval(() => getTodayGrns({ silent: true }), 30_000)
+    return () => {
+      window.clearTimeout(initialTimer)
+      window.clearInterval(refreshTimer)
+    }
+  }, [getTodayGrns])
 
   const goodsPayload = useMemo(
     () => ({
       GoodsMovementCode: goodsIssue.GoodsMovementCode,
       PostingDate: goodsIssue.PostingDate,
       DocumentDate: goodsIssue.DocumentDate,
-      MaterialDocumentHeaderText: goodsIssue.MaterialDocumentHeaderText,
       to_MaterialDocumentItem: {
         results: (serialNumbers.length > 0 ? serialNumbers : ['']).map((serialNumber, index) => ({
           Material: goodsIssue.Material,
@@ -232,7 +306,8 @@ function App() {
     setStatus({ type: 'running', message: 'Creating assets and posting the 241 goods issue...' })
 
     try {
-      const response = await fetch('/api/create-goods-issue-with-assets', {
+       //const response = await fetch('/api/create-goods-issue-with-assets', {
+      const response = await fetch(`${API_BASE_URL}/api/create-goods-issue-with-assets`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ goodsIssue, asset, resumeAssetNumbers }),
@@ -273,6 +348,36 @@ function App() {
     }
   }
 
+  const createPendingAssets = async () => {
+    setBulkProcessing(true)
+    setBulkResult(null)
+    setStatus({ type: 'running', message: 'Creating assets for pending GRNs...' })
+
+    try {
+      //const response = await fetch('/api/process-pending-grns', {
+      const response = await fetch(`${API_BASE_URL}/api/process-pending-grns`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      })
+      const body = await response.json()
+      if (!response.ok) {
+        throw new Error(body.error || 'Could not process pending GRNs.')
+      }
+
+      setBulkResult(body)
+      setTodayGrns(body.monitor?.items || [])
+      setAutomaticallyProcessed(body.monitor?.automaticallyProcessed || [])
+      setStatus({
+        type: body.failure?.length ? 'warning' : 'success',
+        message: `Processed ${body.success?.length || 0} GRN item(s), skipped ${body.skipped?.length || 0}.`,
+      })
+    } catch (error) {
+      setStatus({ type: 'error', message: error.message })
+    } finally {
+      setBulkProcessing(false)
+    }
+  }
+
   const openAssetCreation = () => {
     setAsset((current) => ({
       ...current,
@@ -290,13 +395,16 @@ function App() {
             <h1>Goods Issue with Asset Creation</h1>
           </div>
           <button className="primary" type="button" onClick={createAll} disabled={status.type === 'running' || grnLoading}>
-            {status.type === 'running' ? 'Creating...' : grnLoading ? 'Fetching GRN...' : 'Create All'}
+            {status.type === 'running' ? 'Creating...' : grnLoading ? 'Fetching GRN...' : 'Create Assets'}
           </button>
         </header>
 
         <nav className="tabs" aria-label="Workflow tabs">
           <button type="button" className={activeTab === 'goods' ? 'active' : ''} onClick={() => setActiveTab('goods')}>
             Goods Issue
+          </button>
+          <button type="button" className={activeTab === 'monitor' ? 'active' : ''} onClick={() => setActiveTab('monitor')}>
+            Today GRNs
           </button>
           <button type="button" className={activeTab === 'assets' ? 'active' : ''} onClick={openAssetCreation}>
             Assets Creation
@@ -314,7 +422,12 @@ function App() {
         {activeTab === 'goods' ? (
           <section className="panel">
             <div className="form-grid">
-              <Field label="GRN Number" value={goodsIssue.GrnNumber} onChange={(value) => setGoods('GrnNumber', value)} required />
+              <div className="field-with-action">
+                <Field label="GRN Number" value={goodsIssue.GrnNumber} onChange={(value) => setGoods('GrnNumber', value)} required />
+                <button className="secondary" type="button" onClick={getGrn} disabled={grnLoading}>
+                  {grnLoading ? 'Loading...' : 'Get GRN'}
+                </button>
+              </div>
               <Field label="Goods Movement Code" value={goodsIssue.GoodsMovementCode} onChange={(value) => setGoods('GoodsMovementCode', value)} required />
               <Field label={grnLoading ? 'Posting Date (loading...)' : 'Posting Date'} value={goodsIssue.PostingDate} onChange={() => {}} required readOnly />
               <Field label={grnLoading ? 'Document Date (loading...)' : 'Document Date'} value={goodsIssue.DocumentDate} onChange={() => {}} required readOnly />
@@ -330,7 +443,126 @@ function App() {
             </div>
             <Payload title="Goods issue payload" value={goodsPayload} />
           </section>
-        ) : (
+        ) : null}
+
+        {activeTab === 'monitor' ? (
+          <section className="panel">
+            <div className="panel-actions">
+              <h2>Today's 101 GRNs</h2>
+              <div>
+                <button className="secondary" type="button" onClick={() => getTodayGrns()} disabled={monitorLoading}>
+                  {monitorLoading ? 'Loading...' : 'Get GRNs'}
+                </button>
+                <button className="primary" type="button" onClick={createPendingAssets} disabled={bulkProcessing || monitorLoading}>
+                  {bulkProcessing ? 'Creating...' : 'Create Assets'}
+                </button>
+              </div>
+            </div>
+
+            <div className="table-wrap">
+              <table className="grn-table">
+                <thead>
+                  <tr>
+                    <th>GRN Number</th>
+                    <th>Item</th>
+                    <th>Material</th>
+                    <th>Product Group</th>
+                    <th>Quantity</th>
+                    <th>Inventory Balance</th>
+                    <th>Serial Numbers</th>
+                    <th>Asset Numbers</th>
+                    <th>Plant</th>
+                    <th>Storage Location</th>
+                    <th>Asset Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {todayGrns.length > 0 ? todayGrns.map((item) => (
+                    <tr key={item.key}>
+                      <td>{item.grnNumber}</td>
+                      <td>{item.materialDocumentItem}</td>
+                      <td>{item.material}</td>
+                      <td>{item.productGroup || '-'}</td>
+                      <td>{item.quantity}</td>
+                      <td>
+                        {formatInventoryBalance(item.inventoryBalance)}
+                      </td>
+                      <td>{item.serialNumbers?.join(', ') || '-'}</td>
+                      <td><SerialAssetList pairs={item.serialAssetPairs} assetNumbers={item.assetNumbers} /></td>
+                      <td>{item.plant}</td>
+                      <td>{item.storageLocation}</td>
+                      <td>
+                        <span className={`pill ${statusClass(item.status)}`}>
+                          {statusLabel(item.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan="11">No 101 GRN items loaded for today.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {bulkResult ? (
+              <div className="result-grid">
+                <section>
+                  <h2>Success</h2>
+                  {bulkResult.success?.length ? bulkResult.success.map((item) => (
+                    <div className="message success-line" key={item.key}>
+                      <strong>GRN {item.grnNumber} processed successfully</strong>
+                      <span>{item.assetNumbers.length} Assets created</span>
+                      <span>Balance: {formatInventoryBalance(item.inventoryBalance)}</span>
+                      <SerialAssetList pairs={item.serialAssetPairs} assetNumbers={item.assetNumbers} />
+                      <span>241 Goods Issue posted</span>
+                    </div>
+                  )) : <p className="muted">No pending GRNs were processed successfully.</p>}
+                </section>
+                <section>
+                  <h2>Already Created</h2>
+                  {bulkResult.skipped?.length ? bulkResult.skipped.map((item) => (
+                    <div className="message success-line" key={item.key}>
+                      <strong>GRN {item.grnNumber} asset already created</strong>
+                      <SerialAssetList pairs={item.serialAssetPairs} assetNumbers={item.assetNumbers} />
+                    </div>
+                  )) : <p className="muted">No already-created GRNs were skipped.</p>}
+                </section>
+                <section>
+                  <h2>Failure</h2>
+                  {bulkResult.failure?.length ? bulkResult.failure.map((item) => (
+                    <div className="message failure-line" key={item.key}>
+                      <strong>GRN {item.grnNumber} failed</strong>
+                      <span>{item.error}</span>
+                      <span>Balance: {formatInventoryBalance(item.inventoryBalance)}</span>
+                      <SerialAssetList pairs={item.serialAssetPairs} assetNumbers={item.assetNumbers} />
+                    </div>
+                  )) : <p className="muted">No failures.</p>}
+                </section>
+              </div>
+            ) : null}
+
+            <section className="auto-processed">
+              <h2>Automatically Processed</h2>
+              {automaticallyProcessed.length ? automaticallyProcessed.map((item) => (
+                <div className="message success-line" key={`${item.materialDocument}-${item.materialDocumentItem}-${item.updatedAt}`}>
+                  <strong>GRN {item.materialDocument} processed automatically</strong>
+                  <span>{item.assetNumbers?.length || 0} Assets Created</span>
+                  <span>Balance: {formatInventoryBalance(item.inventoryBalance)}</span>
+                  <SerialAssetList assetNumbers={item.assetNumbers} pairs={(item.serialNumbers || []).map((serialNumber, index) => ({
+                    serialNumber,
+                    assetNumber: item.assetNumbers?.[index] || '',
+                  }))} />
+                  <span>241 Posted</span>
+                  <span>{formatDateTime(item.updatedAt)}</span>
+                </div>
+              )) : <p className="muted">No scheduler-created assets shown for today yet.</p>}
+            </section>
+          </section>
+        ) : null}
+
+        {activeTab === 'assets' ? (
           <section className="panel">
             <h2>Fixed Asset</h2>
             <div className="form-grid">
@@ -353,7 +585,7 @@ function App() {
 
             <Payload title="Asset payload" value={asset} />
           </section>
-        )}
+        ) : null}
 
         {result ? (
           <section className="result">
