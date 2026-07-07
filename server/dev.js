@@ -3,9 +3,10 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const client = join(root, 'client')
 const commands = [
   spawn(process.execPath, [join(root, 'server', 'server.js')], { cwd: root, stdio: 'inherit' }),
-  spawn(process.execPath, [join(root, 'node_modules', 'vite', 'bin', 'vite.js')], { cwd: root, stdio: 'inherit' }),
+  spawn(process.execPath, [join(root, 'node_modules', 'vite', 'bin', 'vite.js')], { cwd: client, stdio: 'inherit' }),
 ]
 
 let stopping = false

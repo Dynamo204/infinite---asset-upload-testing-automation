@@ -455,6 +455,3274 @@
           }
         }
       }
+    },
+    "5000000075/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000075",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 10, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:45.605Z"
+    },
+    "5000000074/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000074",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 10, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:46.083Z"
+    },
+    "5000000073/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000073",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 1, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:46.572Z"
+    },
+    "5000000072/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000072",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 1, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:47.073Z"
+    },
+    "5000000071/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "50000093",
+        "50000094"
+      ],
+      "serialNumbers": [
+        "MODEL-01",
+        "MODEL-02"
+      ],
+      "material": "67",
+      "materialDocument": "5000000071",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T10:58:26.058Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 2,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA07",
+      "assetClass": "3100",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000052')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000052')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000052",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782259200000)/",
+          "PostingDate": "/Date(1782259200000)/",
+          "CreationDate": "/Date(1782259200000)/",
+          "CreationTime": "PT10H58M22S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    },
+    "5000000070/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000070",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "49",
+      "error": "No asset class mapping is configured for ProductGroup YBPM01 on material 49.",
+      "detail": {
+        "material": "49",
+        "productGroup": "YBPM01",
+        "supportedProductGroups": [
+          "YBFA01",
+          "YBFA02",
+          "YBFA03",
+          "YBFA04",
+          "YBFA05",
+          "YBFA06",
+          "YBFA07",
+          "YBFA08",
+          "YBFA09",
+          "YBFA10",
+          "YBFA11",
+          "YBFA12"
+        ]
+      },
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:47.650Z"
+    },
+    "5000000069/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000059",
+        "60000060",
+        "60000061",
+        "60000062"
+      ],
+      "serialNumbers": [
+        "234",
+        "321",
+        "456",
+        "567"
+      ],
+      "material": "81",
+      "materialDocument": "5000000069",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T10:58:30.547Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 4 EA : 81 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50210E006A3BB855B9E24",
+            "timestamp": "20260624105830.4402180",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000059",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "234"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000060",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "321"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000061",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "456"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000062",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "567"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000059",
+          "60000060",
+          "60000061",
+          "60000062"
+        ],
+        "serialNumbers": [
+          "234",
+          "321",
+          "456",
+          "567"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000068/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000063",
+        "60000064",
+        "60000065"
+      ],
+      "serialNumbers": [
+        "LOGIMOUSE1",
+        "LOGIMOUSE2",
+        "LOGIMOUSE3"
+      ],
+      "material": "83",
+      "materialDocument": "5000000068",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T10:58:33.707Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 3 EA : 83 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50210E006A3BB85930299",
+            "timestamp": "20260624105833.6013240",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 83 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='83',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 83 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='83',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 83 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='83',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "83",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000063",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LOGIMOUSE1"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "83",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000064",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LOGIMOUSE2"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "83",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000065",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LOGIMOUSE3"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000063",
+          "60000064",
+          "60000065"
+        ],
+        "serialNumbers": [
+          "LOGIMOUSE1",
+          "LOGIMOUSE2",
+          "LOGIMOUSE3"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000067/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000066",
+        "60000067",
+        "60000068",
+        "60000069",
+        "60000070"
+      ],
+      "serialNumbers": [
+        "LENOVO1",
+        "LENOVO2",
+        "LENOVO3",
+        "LENOVO4",
+        "LENOVO5"
+      ],
+      "material": "81",
+      "materialDocument": "5000000067",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T10:58:39.111Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50210E006A3BB85EBE332",
+            "timestamp": "20260624105838.9876130",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 81 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='81',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000066",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO1"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000067",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO2"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000068",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO3"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000069",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO4"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "81",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000070",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO5"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000066",
+          "60000067",
+          "60000068",
+          "60000069",
+          "60000070"
+        ],
+        "serialNumbers": [
+          "LENOVO1",
+          "LENOVO2",
+          "LENOVO3",
+          "LENOVO4",
+          "LENOVO5"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000076/2026/1": {
+      "status": "failed",
+      "source": "scheduler",
+      "materialDocument": "5000000076",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "63",
+      "error": "No asset class mapping is configured for ProductGroup L001 on material 63.",
+      "detail": {
+        "material": "63",
+        "productGroup": "L001",
+        "supportedProductGroups": [
+          "YBFA01",
+          "YBFA02",
+          "YBFA03",
+          "YBFA04",
+          "YBFA05",
+          "YBFA06",
+          "YBFA07",
+          "YBFA08",
+          "YBFA09",
+          "YBFA10",
+          "YBFA11",
+          "YBFA12"
+        ]
+      },
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "updatedAt": "2026-06-24T18:07:45.075Z"
+    },
+    "5000000077/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000076",
+        "60000077",
+        "60000078",
+        "60000079",
+        "60000080"
+      ],
+      "serialNumbers": [
+        "B240866771",
+        "B240866772",
+        "B240866773",
+        "B240866774",
+        "B240866775"
+      ],
+      "material": "86",
+      "materialDocument": "5000000077",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T12:12:04.621Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50240E006A3BC9935754B",
+            "timestamp": "20260624121204.4548470",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='86',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='86',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='86',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='86',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 86 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='86',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "86",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000076",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B240866771"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "86",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000077",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B240866772"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "86",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000078",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B240866773"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "86",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000079",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B240866774"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "86",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000080",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B240866775"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000076",
+          "60000077",
+          "60000078",
+          "60000079",
+          "60000080"
+        ],
+        "serialNumbers": [
+          "B240866771",
+          "B240866772",
+          "B240866773",
+          "B240866774",
+          "B240866775"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000078/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000084",
+        "60000085",
+        "60000086"
+      ],
+      "serialNumbers": [
+        "LENOVO01",
+        "LENOVO02",
+        "LENOVO03"
+      ],
+      "material": "87",
+      "materialDocument": "5000000078",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T12:17:03.091Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50180E006A3BCABEF938C",
+            "timestamp": "20260624121702.9048100",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000084",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO01"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000085",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO02"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000086",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "LENOVO03"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000084",
+          "60000085",
+          "60000086"
+        ],
+        "serialNumbers": [
+          "LENOVO01",
+          "LENOVO02",
+          "LENOVO03"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000079/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000087",
+        "60000088",
+        "60000089"
+      ],
+      "serialNumbers": [
+        "ABC1",
+        "ABC2",
+        "ABC3"
+      ],
+      "material": "87",
+      "materialDocument": "5000000079",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T12:37:04.866Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 3,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000055')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000055')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000055",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782259200000)/",
+          "PostingDate": "/Date(1782259200000)/",
+          "CreationDate": "/Date(1782259200000)/",
+          "CreationTime": "PT12H37M01S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      }
+    },
+    "5000000081/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000093",
+        "60000094",
+        "60000095",
+        "60000096",
+        "60000097"
+      ],
+      "serialNumbers": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "material": "91",
+      "materialDocument": "5000000081",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T17:17:51.263Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50290E006A3C113CD36F2",
+            "timestamp": "20260624171749.5660260",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='91',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='91',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='91',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='91',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 5 EA : 91 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='5%20EA%20%3A',MESSAGE_V3='91',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "91",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000093",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "91",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000094",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "2"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "91",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000095",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "3"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "91",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000096",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "4"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "91",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000097",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "5"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000093",
+          "60000094",
+          "60000095",
+          "60000096",
+          "60000097"
+        ],
+        "serialNumbers": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000080/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000098",
+        "60000099",
+        "60000100",
+        "60000101",
+        "60000102"
+      ],
+      "serialNumbers": [
+        "MACDSK21",
+        "MACDSK22",
+        "MACDSK23",
+        "MACDSK24",
+        "MACDSK25"
+      ],
+      "material": "87",
+      "materialDocument": "5000000080",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T17:18:00.174Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 5,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000057')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000057')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000057",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782259200000)/",
+          "PostingDate": "/Date(1782259200000)/",
+          "CreationDate": "/Date(1782259200000)/",
+          "CreationTime": "PT17H17M55S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'MaterialDocumentItem' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'MaterialDocumentItem' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC50290E006A3C114613643",
+              "timestamp": "20260624171758.9393880",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
+    },
+    "5000000082/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000110",
+        "60000111",
+        "60000112",
+        "60000113",
+        "60000114",
+        "60000115",
+        "60000116"
+      ],
+      "serialNumbers": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+      ],
+      "material": "92",
+      "materialDocument": "5000000082",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T17:27:53.210Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC501F0E006A3C1396A5887",
+            "timestamp": "20260624172751.6241740",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 7 EA : 92 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='7%20EA%20%3A',MESSAGE_V3='92',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782259200000)/",
+        "DocumentDate": "/Date(1782259200000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000110",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B1"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000111",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B2"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000112",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B3"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000113",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B4"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000114",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B5"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000115",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B6"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "92",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000116",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "B7"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000110",
+          "60000111",
+          "60000112",
+          "60000113",
+          "60000114",
+          "60000115",
+          "60000116"
+        ],
+        "serialNumbers": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "B7"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      }
+    },
+    "5000000083/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000117",
+        "60000118",
+        "60000119",
+        "60000120",
+        "60000121",
+        "60000122"
+      ],
+      "serialNumbers": [
+        "SAMSUNGLP1",
+        "SAMSUNGLP2",
+        "SAMSUNGLP3",
+        "SAMSUNGLP4",
+        "SAMSUNGLP5",
+        "SAMSUNGLP6"
+      ],
+      "material": "93",
+      "materialDocument": "5000000083",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-24T17:32:56.704Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 6,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000059')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000059')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000059",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782259200000)/",
+          "PostingDate": "/Date(1782259200000)/",
+          "CreationDate": "/Date(1782259200000)/",
+          "CreationTime": "PT17H32M49S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'MaterialDocumentItem' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'MaterialDocumentItem' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC50220E006A3C14C71195F",
+              "timestamp": "20260624173255.4994920",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
+    },
+    "5000000086/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000142",
+        "60000143"
+      ],
+      "serialNumbers": [
+        "SN01",
+        "SN02"
+      ],
+      "material": "87",
+      "materialDocument": "5000000086",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T06:13:28.010Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50160E006A3CBBB9EB1D9",
+            "timestamp": "20260625052514.2864270",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782345600000)/",
+        "DocumentDate": "/Date(1782345600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000142",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "SN01"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000143",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "SN02"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000142",
+          "60000143"
+        ],
+        "serialNumbers": [
+          "SN01",
+          "SN02"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000085/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000144",
+        "60000145",
+        "60000146"
+      ],
+      "serialNumbers": [
+        "SZ01",
+        "SZ02",
+        "SZ03"
+      ],
+      "material": "87",
+      "materialDocument": "5000000085",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T06:13:28.329Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50160E006A3CBBBD08D2E",
+            "timestamp": "20260625052518.2653620",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 3 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='3%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782345600000)/",
+        "DocumentDate": "/Date(1782345600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000144",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "SZ01"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000145",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "SZ02"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000146",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "SZ03"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000144",
+          "60000145",
+          "60000146"
+        ],
+        "serialNumbers": [
+          "SZ01",
+          "SZ02",
+          "SZ03"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000084/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000147",
+        "60000148",
+        "60000149",
+        "60000150"
+      ],
+      "serialNumbers": [
+        "INTELCORE15",
+        "INTELCORE16",
+        "INTELCORE17",
+        "INTELCORE18"
+      ],
+      "material": "87",
+      "materialDocument": "5000000084",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T06:13:28.624Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 4 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50200E006A3CBBC2BC611",
+            "timestamp": "20260625052523.4161230",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 4 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='4%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782345600000)/",
+        "DocumentDate": "/Date(1782345600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000147",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "INTELCORE15"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000148",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "INTELCORE16"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000149",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "INTELCORE17"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000150",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "INTELCORE18"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000147",
+          "60000148",
+          "60000149",
+          "60000150"
+        ],
+        "serialNumbers": [
+          "INTELCORE15",
+          "INTELCORE16",
+          "INTELCORE17",
+          "INTELCORE18"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000087/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000151",
+        "60000152",
+        "60000153",
+        "60000154",
+        "60000155",
+        "60000156",
+        "60000157"
+      ],
+      "serialNumbers": [
+        "AB10",
+        "AB11",
+        "AB12",
+        "AB13",
+        "AB14",
+        "AB15",
+        "AB16"
+      ],
+      "material": "94",
+      "materialDocument": "5000000087",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T06:13:27.711Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 7,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000063')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000063')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000063",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782345600000)/",
+          "PostingDate": "/Date(1782345600000)/",
+          "CreationDate": "/Date(1782345600000)/",
+          "CreationTime": "PT05H45M17S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000088/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000166",
+        "60000167"
+      ],
+      "serialNumbers": [
+        "2506202601",
+        "2506202602"
+      ],
+      "material": "87",
+      "materialDocument": "5000000088",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T06:13:27.355Z",
+      "source": "scheduler",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC500B0E006A3CC196AF18B",
+            "timestamp": "20260625055014.4697310",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782345600000)/",
+        "DocumentDate": "/Date(1782345600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000166",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "2506202601"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000167",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "2506202602"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000166",
+          "60000167"
+        ],
+        "serialNumbers": [
+          "2506202601",
+          "2506202602"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000089/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000196",
+        "60000197"
+      ],
+      "serialNumbers": [
+        "SERIAL01",
+        "SERIAL02"
+      ],
+      "poDescription": "Inspiron 15 3000 intel core i3",
+      "material": "87",
+      "materialDocument": "5000000089",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-25T07:20:59.977Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 2,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000065')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000065')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000065",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782345600000)/",
+          "PostingDate": "/Date(1782345600000)/",
+          "CreationDate": "/Date(1782345600000)/",
+          "CreationTime": "PT07H20M57S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      },
+      "cboLog": {
+        "written": true
+      }
+    },
+    "5000000110/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000110",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 10, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "poDescription": "AC SERVICE REPAIR",
+      "updatedAt": "2026-06-30T06:00:11.352Z"
+    },
+    "5000000109/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000109",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "AIRCONDITION01",
+      "error": "Maintain serial numbers for total quantity. Quantity is 5, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "poDescription": "AC SERVICE REPAIR",
+      "updatedAt": "2026-06-30T06:00:12.066Z"
+    },
+    "5000000111/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000111",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "100005",
+      "error": "Maintain serial numbers for total quantity. Quantity is 1, but 0 serial number(s) were provided.",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "",
+      "assetClass": "",
+      "poDescription": "Facility - Security",
+      "updatedAt": "2026-06-30T06:00:10.401Z"
+    },
+    "5000000112/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000112",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "49",
+      "error": "No asset class mapping is configured for ProductGroup YBPM01 on material 49.",
+      "detail": {
+        "material": "49",
+        "productGroup": "YBPM01",
+        "supportedProductGroups": [
+          "YBFA01",
+          "YBFA02",
+          "YBFA03",
+          "YBFA04",
+          "YBFA05",
+          "YBFA06",
+          "YBFA07",
+          "YBFA08",
+          "YBFA09",
+          "YBFA10",
+          "YBFA11",
+          "YBFA12"
+        ]
+      },
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBPM01",
+      "assetClass": "",
+      "poDescription": "Dell Laptop Latitude M.No.5400",
+      "updatedAt": "2026-06-30T06:00:09.369Z"
+    },
+    "5000000114/2026/1": {
+      "status": "success",
+      "assetNumbers": [
+        "60000228",
+        "60000229",
+        "60000230"
+      ],
+      "serialNumbers": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "poDescription": "Laptop - Dell Latitude 5300",
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "material": "61",
+      "materialDocument": "5000000114",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-30T06:00:06.534Z",
+      "source": "scheduler",
+      "plant": "IN07",
+      "storageLocation": "IN07",
+      "quantity": 3,
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "goodsIssueResponse": {
+        "d": {
+          "__metadata": {
+            "id": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000071')",
+            "uri": "https://my434938-api.s4hana.cloud.sap/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader(MaterialDocumentYear='2026',MaterialDocument='4900000071')",
+            "type": "API_MATERIAL_DOCUMENT_SRV.A_MaterialDocumentHeaderType"
+          },
+          "MaterialDocumentYear": "2026",
+          "MaterialDocument": "4900000071",
+          "InventoryTransactionType": "WA",
+          "DocumentDate": "/Date(1782777600000)/",
+          "PostingDate": "/Date(1782777600000)/",
+          "CreationDate": "/Date(1782777600000)/",
+          "CreationTime": "PT04H47M04S",
+          "CreatedByUser": "CC0000000007",
+          "MaterialDocumentHeaderText": "",
+          "ReferenceDocument": "",
+          "VersionForPrintingSlip": "2",
+          "ManualPrintIsTriggered": "",
+          "CtrlPostgForExtWhseMgmtSyst": "",
+          "GoodsMovementCode": "03",
+          "to_MaterialDocumentItem": {
+            "results": []
+          }
+        }
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'description' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'description' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC501E0E006A435B66B12D6",
+              "timestamp": "20260630060006.7960560",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
+    },
+    "5000000113/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000113",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "91",
+      "error": "Missing mandatory fields: StorageLocation",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "poDescription": "Access Laptop",
+      "updatedAt": "2026-06-30T06:00:07.660Z"
+    },
+    "5000000118/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000252"
+      ],
+      "serialNumbers": [
+        "S3"
+      ],
+      "poDescription": "HP ZBook 8 G1i 14 inch Mobile Work PC-La",
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "material": "87",
+      "materialDocument": "5000000118",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-30T06:00:04.896Z",
+      "source": "manual-bulk",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 1 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "M7/021",
+          "message": {
+            "lang": "en",
+            "value": "Deficit of SL Unrestricted-use 1 EA : 87 IN07 IN07"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50100E006A435A4F28391",
+            "timestamp": "20260630055528.2361740",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 1 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='1%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782777600000)/",
+        "DocumentDate": "/Date(1782777600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000252",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "S3"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000252"
+        ],
+        "serialNumbers": [
+          "S3"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'description' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'description' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC501E0E006A435B65497E6",
+              "timestamp": "20260630060005.1586680",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
+    },
+    "5000000117/2026/1": {
+      "status": "failed",
+      "source": "manual-bulk",
+      "materialDocument": "5000000117",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "material": "91",
+      "error": "Missing mandatory fields: StorageLocation",
+      "assetNumbers": [],
+      "serialNumbers": [],
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "poDescription": "Access Laptop",
+      "updatedAt": "2026-06-30T06:00:05.920Z"
+    },
+    "5000000116/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000253",
+        "60000254"
+      ],
+      "serialNumbers": [
+        "S1",
+        "S2"
+      ],
+      "poDescription": "Lenovo Inspiron",
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "material": "87",
+      "materialDocument": "5000000116",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-30T06:00:06.106Z",
+      "source": "manual-bulk",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50100E006A435A54D0370",
+            "timestamp": "20260630055532.5316110",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782777600000)/",
+        "DocumentDate": "/Date(1782777600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000253",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "S1"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000254",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "S2"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000253",
+          "60000254"
+        ],
+        "serialNumbers": [
+          "S1",
+          "S2"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'description' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'description' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC501E0E006A435B665A685",
+              "timestamp": "20260630060006.3879640",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
+    },
+    "5000000115/2026/1": {
+      "status": "failed",
+      "assetNumbers": [
+        "60000255",
+        "60000256"
+      ],
+      "serialNumbers": [
+        "AS101",
+        "AS102"
+      ],
+      "poDescription": "Lenovo Inspiron",
+      "productGroup": "YBFA08",
+      "assetClass": "3200",
+      "material": "87",
+      "materialDocument": "5000000115",
+      "materialDocumentYear": "2026",
+      "materialDocumentItem": "1",
+      "updatedAt": "2026-06-30T06:00:06.329Z",
+      "source": "manual-bulk",
+      "error": "241 goods issue cannot be posted because unrestricted-use stock is insufficient. Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07. Existing asset numbers were saved and will be reused on retry.",
+      "detail": {
+        "error": {
+          "code": "MM_IM_ODATA_API_MDOC/014",
+          "message": {
+            "lang": "en",
+            "value": "Material Document processing failed"
+          },
+          "innererror": {
+            "application": {
+              "component_id": "MM-IM-VDM-SGM",
+              "service_namespace": "/SAP/",
+              "service_id": "API_MATERIAL_DOCUMENT_SRV",
+              "service_version": "0001"
+            },
+            "transactionid": "6DFFBDC8ADC50100E006A435A57AF6EF",
+            "timestamp": "20260630055535.9354570",
+            "Error_Resolution": {
+              "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+              "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+            },
+            "errordetails": [
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "M7/021",
+                "message": "Deficit of SL Unrestricted-use 2 EA : 87 IN07 IN07",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='M7',MSGNO='021',MESSAGE_V1='SL%20Unrestricted-use',MESSAGE_V2='2%20EA%20%3A',MESSAGE_V3='87',MESSAGE_V4='IN07%20IN07')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              },
+              {
+                "ContentID": "",
+                "code": "MM_IM_ODATA_API_MDOC/014",
+                "message": "Material Document processing failed",
+                "longtext_url": "/sap/opu/odata/iwbep/message_text;o=LOCAL/T100_longtexts(MSGID='MM_IM_ODATA_API_MDOC',MSGNO='014',MESSAGE_V1='',MESSAGE_V2='',MESSAGE_V3='',MESSAGE_V4='')/$value",
+                "propertyref": "",
+                "severity": "error",
+                "transition": false,
+                "target": ""
+              }
+            ]
+          }
+        }
+      },
+      "failedPayload": {
+        "GoodsMovementCode": "03",
+        "PostingDate": "/Date(1782777600000)/",
+        "DocumentDate": "/Date(1782777600000)/",
+        "to_MaterialDocumentItem": {
+          "results": [
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000255",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "AS101"
+                  }
+                ]
+              }
+            },
+            {
+              "Material": "87",
+              "Plant": "IN07",
+              "StorageLocation": "IN07",
+              "GoodsMovementType": "241",
+              "EntryUnit": "EA",
+              "QuantityInEntryUnit": "1",
+              "MasterFixedAsset": "60000256",
+              "to_SerialNumbers": {
+                "results": [
+                  {
+                    "SerialNumber": "AS102"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "partialResult": {
+        "assetNumbers": [
+          "60000255",
+          "60000256"
+        ],
+        "serialNumbers": [
+          "AS101",
+          "AS102"
+        ]
+      },
+      "inventoryBalance": {
+        "quantity": null,
+        "unit": "",
+        "unavailable": true
+      },
+      "cboLog": {
+        "written": false,
+        "error": "SAP request failed for /sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION. Property 'description' is invalid",
+        "detail": {
+          "error": {
+            "code": "/IWCOR/CX_DS_EP_PROPERTY_ERROR/00505692409C1ED6B8FE112855048EDA",
+            "message": {
+              "lang": "en",
+              "value": "Property 'description' is invalid"
+            },
+            "innererror": {
+              "application": {
+                "component_id": "",
+                "service_namespace": "/SAP/",
+                "service_id": "YY1_ASSETUPLOADAUTOMATION_CDS",
+                "service_version": "0001"
+              },
+              "transactionid": "6DFFBDC8ADC501E0E006A435B66AE21F",
+              "timestamp": "20260630060006.5790660",
+              "Error_Resolution": {
+                "SAP_Transaction": "For backend administrators: use ADT feed reader \"SAP Gateway Error Log\" or run transaction /IWFND/ERROR_LOG on SAP Gateway hub system and search for entries with the timestamp above for more details",
+                "SAP_Note": "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+              },
+              "errordetails": []
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const envLocalPath = join(__dirname, '..', '.env.local')
+const envLocalPath = join(__dirname, '..', '.env')
 
 if (existsSync(envLocalPath)) {
   const envLocal = readFileSync(envLocalPath, 'utf8')
@@ -28,6 +28,9 @@ const SAP_BASE_URL = process.env.SAP_BASE_URL || 'https://my434938-api.s4hana.cl
 const SAP_USERNAME = process.env.SAP_USERNAME
 const SAP_PASSWORD = process.env.SAP_PASSWORD
 const SAP_AUTH_HEADER = process.env.SAP_AUTH_HEADER
+const PO_USERNAME = process.env.PO_USERNAME || process.env.SAP_PO_USERNAME
+const PO_PASSWORD = process.env.PO_PASSWORD || process.env.SAP_PO_PASSWORD
+const PO_AUTH_HEADER = process.env.PO_AUTH_HEADER || process.env.SAP_PO_AUTH_HEADER
 const DEFAULT_SCHEDULER_INTERVAL_MS = 5 * 60 * 1000
 const configuredSchedulerInterval = Number(process.env.GRN_SCHEDULER_INTERVAL_MS || DEFAULT_SCHEDULER_INTERVAL_MS)
 const SCHEDULER_INTERVAL_MS = Number.isFinite(configuredSchedulerInterval) && configuredSchedulerInterval > 0
@@ -53,6 +56,28 @@ const ENDPOINTS = {
     '/sap/opu/odata4/sap/api_fixedasset/srvd_a2x/sap/fixedasset/0001/FixedAsset',
   fixedAssetCreate:
     '/sap/opu/odata4/sap/api_fixedasset/srvd_a2x/sap/fixedasset/0001/FixedAsset/SAP__self.CreateMasterFixedAsset',
+  purchaseOrderItems:
+    '/sap/opu/odata4/sap/api_purchaseorder_2/srvd_a2x/sap/purchaseorder/0001/PurchaseOrderItem',
+  assetUploadAutomation:
+    '/sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION',
+}
+
+const CBO_FIELDS = {
+  materialDocument: process.env.CBO_FIELD_MATERIAL_DOCUMENT || 'MaterialDocument',
+  materialDocumentItem: process.env.CBO_FIELD_MATERIAL_DOCUMENT_ITEM || 'MaterialDocumentItem',
+  material: process.env.CBO_FIELD_MATERIAL || 'Material',
+  productGroup: process.env.CBO_FIELD_PRODUCT_GROUP || 'ProductGroup',
+  assetClass: process.env.CBO_FIELD_ASSET_CLASS || 'AssetClass',
+  plant: process.env.CBO_FIELD_PLANT || 'Plant',
+  storageLocation: process.env.CBO_FIELD_STORAGE_LOCATION || 'StorageLocation',
+  quantity: process.env.CBO_FIELD_QUANTITY || 'Quantity',
+  serialNumbers: process.env.CBO_FIELD_SERIAL_NUMBERS || 'SerialNumbers',
+  assetNumbers: process.env.CBO_FIELD_ASSET_NUMBERS || 'AssetNumbers',
+  processedStatus: process.env.CBO_FIELD_PROCESSED_STATUS || 'ProcessedStatus',
+  errorMessage: process.env.CBO_FIELD_ERROR_MESSAGE || 'ErrorMessage',
+  processedOn: process.env.CBO_FIELD_PROCESSED_ON || 'ProcessedOn',
+  poDescription: process.env.CBO_FIELD_PO_DESCRIPTION || 'PurchaseOrderItemText',
+  source: process.env.CBO_FIELD_SOURCE || 'Source',
 }
 
 const PRODUCT_GROUP_ASSET_CLASS = {
@@ -137,10 +162,16 @@ const sendJson = (response, statusCode, payload) => {
   response.end(JSON.stringify(payload))
 }
 
-const getAuthHeader = () => {
+const buildBasicAuthHeader = (username, password) => {
+  if (!username || !password) return null
+  return `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+}
+
+const getAuthHeader = (options = {}) => {
+  if (options.authHeader) return options.authHeader
+  if (options.username || options.password) return buildBasicAuthHeader(options.username, options.password)
   if (SAP_AUTH_HEADER) return SAP_AUTH_HEADER
-  if (!SAP_USERNAME || !SAP_PASSWORD) return null
-  return `Basic ${Buffer.from(`${SAP_USERNAME}:${SAP_PASSWORD}`).toString('base64')}`
+  return buildBasicAuthHeader(SAP_USERNAME, SAP_PASSWORD)
 }
 
 const getResponseBody = async (response) => {
@@ -166,6 +197,8 @@ const stringifyDetail = (detail) => {
 
   return [...new Set(messages)].join(' | ') || JSON.stringify(detail)
 }
+
+const compactText = (value, maxLength = 255) => String(value || '').replace(/\s+/g, ' ').trim().slice(0, maxLength)
 
 const getSapErrorDetails = (detail) => detail?.error?.innererror?.errordetails || []
 
@@ -195,7 +228,7 @@ const cookieHeader = (headers) => {
 }
 
 const sapRequest = async (path, method, payload, options = {}) => {
-  const auth = getAuthHeader()
+  const auth = getAuthHeader(options)
   if (!auth) {
     throw Object.assign(
       new Error('SAP credentials are missing. Set SAP_USERNAME and SAP_PASSWORD, or SAP_AUTH_HEADER.'),
@@ -248,8 +281,8 @@ const sapRequest = async (path, method, payload, options = {}) => {
   return body
 }
 
-const sapGet = async (path) => {
-  const auth = getAuthHeader()
+const sapGet = async (path, options = {}) => {
+  const auth = getAuthHeader(options)
   if (!auth) {
     throw Object.assign(new Error('SAP credentials are missing. Set SAP_USERNAME and SAP_PASSWORD, or SAP_AUTH_HEADER.'), {
       statusCode: 500,
@@ -267,6 +300,27 @@ const sapGet = async (path) => {
     })
   }
   return body
+}
+
+const sapGetText = async (path, options = {}) => {
+  const auth = getAuthHeader(options)
+  if (!auth) {
+    throw Object.assign(new Error('SAP credentials are missing. Set SAP_USERNAME and SAP_PASSWORD, or SAP_AUTH_HEADER.'), {
+      statusCode: 500,
+    })
+  }
+
+  const response = await fetch(`${SAP_BASE_URL}${path}`, {
+    headers: { authorization: auth, accept: 'application/xml,text/xml,*/*' },
+  })
+  const text = await response.text()
+  if (!response.ok) {
+    throw Object.assign(new Error(`SAP request failed for ${path}. ${text}`), {
+      statusCode: response.status,
+      detail: text,
+    })
+  }
+  return text
 }
 
 const required = (value) => value !== undefined && value !== null && String(value).trim() !== ''
@@ -340,6 +394,11 @@ const parseSapDate = (value) => {
 
 const toODataV2Date = (date) => `/Date(${Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())})/`
 
+const toODataV2DateTime = (value) => {
+  const date = parseSapDate(value) || new Date()
+  return `/Date(${date.getTime()})/`
+}
+
 const toISODate = (value) => {
   const date = parseSapDate(value)
   return date ? date.toISOString().slice(0, 10) : null
@@ -398,9 +457,183 @@ const updateProcessedItem = async (key, patch) => {
   return store.items[key]
 }
 
-const mergeAssetTemplateForItem = (asset, grnItem, assetClass) => {
+const withoutEmptyValues = (payload) =>
+  Object.fromEntries(Object.entries(payload).filter(([, value]) => value !== undefined && value !== null && value !== ''))
+
+let cboPropertyNameCache = null
+
+const normalizeName = (value) => String(value || '').replace(/^YY1/i, '').replace(/[^a-z0-9]/gi, '').toLowerCase()
+
+const extractMetadataProperties = (metadata) =>
+  [...String(metadata || '').matchAll(/<Property\b[^>]*\bName="([^"]+)"/g)]
+    .map((match) => match[1])
+    .filter((name) => !['SAP_UUID'].includes(name))
+
+const getCboPropertyNames = async () => {
+  if (cboPropertyNameCache) return cboPropertyNameCache
+
+  try {
+    const metadata = await sapGetText('/sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/$metadata')
+    cboPropertyNameCache = extractMetadataProperties(metadata)
+  } catch (error) {
+    console.warn(`Could not read CBO metadata, using configured field names: ${error.message}`)
+    cboPropertyNameCache = Object.values(CBO_FIELDS)
+  }
+
+  return cboPropertyNameCache
+}
+
+const findCboProperty = (properties, configuredName, aliases = []) => {
+  const candidates = [configuredName, ...aliases].map(normalizeName)
+  return properties.find((property) => candidates.includes(normalizeName(property)))
+    || properties.find((property) => {
+      const normalizedProperty = normalizeName(property)
+      return candidates.some((candidate) => normalizedProperty.startsWith(candidate))
+    })
+}
+
+const addCboField = (payload, properties, key, value, aliases = []) => {
+  if (!required(value)) return
+  const property = findCboProperty(properties, CBO_FIELDS[key], aliases)
+  if (property) payload[property] = value
+}
+
+const buildCboPayload = async ({
+  grnItem,
+  status,
+  errorMessage = '',
+  assetNumbers = [],
+  source = '',
+  productGroup = '',
+  assetClass = '',
+  inventoryBalance,
+  processedOn = new Date().toISOString(),
+}) => {
+  const properties = await getCboPropertyNames()
+  const serialNumbers = Array.isArray(grnItem?.serialNumbers)
+    ? grnItem.serialNumbers
+    : splitSerialNumbers(grnItem?.serialNumbers || grnItem?.to_SerialNumbers)
+  let resolvedProductGroup = productGroup || grnItem?.productGroup || ''
+  let resolvedAssetClass = assetClass || grnItem?.assetClass || ''
+  if (!resolvedProductGroup || !resolvedAssetClass) {
+    try {
+      const mapping = await getAssetClassMappingForGrnItem(grnItem)
+      resolvedProductGroup ||= mapping.productGroup
+      resolvedAssetClass ||= mapping.assetClass
+    } catch {
+      resolvedProductGroup ||= ''
+      resolvedAssetClass ||= ''
+    }
+  }
+  let poDescription = compactText(grnItem?.poDescription, 50)
+  if (!poDescription) {
+    try {
+      poDescription = await getPurchaseOrderItemText(grnItem)
+    } catch {
+      poDescription = ''
+    }
+  }
+  const payload = {}
+
+  addCboField(payload, properties, 'materialDocument', String(grnItem?.grnNumber ?? grnItem?.MaterialDocument ?? ''), [
+    'MaterialDocument',
+    'MaterialDoc',
+    'GRN',
+    'GRNNumber',
+    'GrnNumber',
+  ])
+  addCboField(payload, properties, 'materialDocumentItem', String(grnItem?.materialDocumentItem ?? grnItem?.MaterialDocumentItem ?? ''), [
+    'MaterialDocumentItem',
+    'MaterialDocItem',
+    'GRNItem',
+    'Item',
+  ])
+  addCboField(payload, properties, 'material', String(grnItem?.material ?? grnItem?.Material ?? ''), ['Material'])
+  addCboField(payload, properties, 'productGroup', resolvedProductGroup, ['ProductGroup', 'MaterialGroup'])
+  addCboField(payload, properties, 'assetClass', resolvedAssetClass, ['AssetClass'])
+  addCboField(payload, properties, 'plant', String(grnItem?.plant ?? grnItem?.Plant ?? ''), ['Plant'])
+  addCboField(payload, properties, 'storageLocation', String(grnItem?.storageLocation ?? grnItem?.StorageLocation ?? ''), ['StorageLocation', 'StorageLoc'])
+  addCboField(payload, properties, 'quantity', String(Math.abs(Number(grnItem?.quantity ?? grnItem?.QuantityInEntryUnit ?? grnItem?.Quantity ?? 0)) || ''), ['Quantity'])
+  addCboField(payload, properties, 'serialNumbers', serialNumbers.join(', '), ['SerialNumbers', 'SerialNumber'])
+  addCboField(payload, properties, 'assetNumbers', assetNumbers.filter(required).join(', '), ['AssetNumbers', 'AssetNumber', 'FixedAsset'])
+  addCboField(payload, properties, 'processedStatus', status, ['ProcessingStatus', 'ProcessedStatus', 'Status'])
+  addCboField(payload, properties, 'errorMessage', compactText(errorMessage, 500), ['ErrorMessage', 'SAPErrorMessage', 'Message'])
+  addCboField(payload, properties, 'processedOn', toODataV2DateTime(processedOn), ['ProcessedOn', 'ProcessedAt', 'AssetCreationTime'])
+  addCboField(payload, properties, 'poDescription', poDescription, [
+    'Description',
+    'PurchaseOrderItemText',
+    'PurchaseOrderDescription',
+    'PODescription',
+    'AssetDescription',
+  ])
+  addCboField(payload, properties, 'source', source, ['Source', 'ProcessSource'])
+
+  if (inventoryBalance?.quantity !== undefined && inventoryBalance?.quantity !== null) {
+    const balanceProperty = findCboProperty(properties, 'InventoryBalance', ['Balance', 'InventoryBalance'])
+    if (balanceProperty) payload[balanceProperty] = `${inventoryBalance.quantity} ${inventoryBalance.unit || ''}`.trim()
+  }
+
+  return withoutEmptyValues(payload)
+}
+
+const writeCboProcessLog = async (record) => {
+  try {
+    const payload = await buildCboPayload(record)
+    if (Object.keys(payload).length === 0) {
+      return { written: false, error: 'No matching writable CBO fields were found.' }
+    }
+
+    await sapRequest(
+      ENDPOINTS.assetUploadAutomation,
+      'POST',
+      payload,
+      { tokenPath: ENDPOINTS.assetUploadAutomation },
+    )
+    return { written: true }
+  } catch (error) {
+    console.warn(`Could not write asset process log to CBO: ${error.message}`)
+    return { written: false, error: error.message, detail: error.detail }
+  }
+}
+
+const ensureStoredItemCboLog = async (key, sourceItem, storedItem, source = storedItem?.source || 'scheduler') => {
+  if (!storedItem || storedItem.cboLog?.written) return storedItem?.cboLog
+
+  const status = storedItem.status === 'success' || hasCreatedAssetsForQuantity(storedItem, storedItem.quantity || 0)
+    ? 'Success'
+    : storedItem.status === 'failed'
+      ? 'Failed'
+      : ''
+  if (!status) return storedItem.cboLog
+
+  const cboLog = await writeCboProcessLog({
+    grnItem: {
+      ...sourceItem,
+      grnNumber: storedItem.materialDocument || sourceItem.MaterialDocument,
+      materialDocumentItem: storedItem.materialDocumentItem || sourceItem.MaterialDocumentItem,
+      material: storedItem.material || sourceItem.Material,
+      quantity: storedItem.quantity || sourceItem.QuantityInEntryUnit,
+      serialNumbers: storedItem.serialNumbers || splitSerialNumbers(sourceItem.to_SerialNumbers),
+      poDescription: storedItem.poDescription,
+    },
+    status,
+    errorMessage: storedItem.error || '',
+    assetNumbers: getStoredAssetNumbers(storedItem),
+    productGroup: storedItem.productGroup,
+    assetClass: storedItem.assetClass,
+    inventoryBalance: storedItem.inventoryBalance,
+    source,
+    processedOn: storedItem.updatedAt || new Date().toISOString(),
+  })
+
+  await updateProcessedItem(key, { cboLog })
+  return cboLog
+}
+
+const mergeAssetTemplateForItem = (asset, grnItem, assetClass, preserveManualValues = false) => {
   const assetPayload = JSON.parse(JSON.stringify(asset || defaultAssetTemplate))
-  assetPayload.AssetClass = assetClass
+  if (preserveManualValues) assetPayload.AssetClass ||= assetClass
+  else assetPayload.AssetClass = assetClass
   assetPayload._General ||= {}
   assetPayload._AccountAssignment ||= {}
   assetPayload._Inventory ||= {}
@@ -411,10 +644,17 @@ const mergeAssetTemplateForItem = (asset, grnItem, assetClass) => {
   assetPayload._Ledger[0]._Valuation[0]._TimeBasedValuation ||= JSON.parse(JSON.stringify(defaultAssetTemplate._Ledger[0]._Valuation[0]._TimeBasedValuation))
   assetPayload._Ledger[0]._Valuation[0]._TimeBasedValuation[0] ||= JSON.parse(JSON.stringify(defaultAssetTemplate._Ledger[0]._Valuation[0]._TimeBasedValuation[0]))
 
-  assetPayload._General.FixedAssetDescription ||= `${grnItem.material} ${grnItem.grnNumber}`
-  assetPayload._General.AssetAdditionalDescription ||= `GRN ${grnItem.grnNumber} item ${grnItem.materialDocumentItem}`
+  const poDescription = compactText(grnItem.poDescription, 50)
+  if (poDescription && !preserveManualValues) {
+    assetPayload._General.FixedAssetDescription = poDescription
+    assetPayload._General.AssetAdditionalDescription = poDescription
+  } else {
+    assetPayload._General.FixedAssetDescription ||= `${grnItem.material} ${grnItem.grnNumber}`
+    assetPayload._General.AssetAdditionalDescription ||= `GRN ${grnItem.grnNumber} item ${grnItem.materialDocumentItem}`
+  }
   assetPayload._AccountAssignment.Plant ||= grnItem.plant
-  assetPayload._Ledger[0].AssetCapitalizationDate = grnItem.postingDateISO
+  if (preserveManualValues) assetPayload._Ledger[0].AssetCapitalizationDate ||= grnItem.postingDateISO
+  else assetPayload._Ledger[0].AssetCapitalizationDate = grnItem.postingDateISO
 
   const valuation = assetPayload._Ledger[0]._Valuation[0]
   const timeBasedValuation = valuation._TimeBasedValuation[0]
@@ -444,7 +684,7 @@ const getGrnDetails = async (materialDocument) => {
     })
   }
 
-  return buildGrnDetailsFromItems(materialDocument, items, body)
+  return enrichGrnDetails(await buildGrnDetailsFromItems(materialDocument, items, body))
 }
 
 const buildGrnDetailsFromItems = (materialDocument, items, rawBody) => {
@@ -485,11 +725,14 @@ const buildGrnDetailsFromItems = (materialDocument, items, rawBody) => {
   const quantityValue = items.reduce((total, item) => total + Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0)), 0)
   const quantity = parseQuantity(quantityValue)
   validateSerialNumbers(serialNumbers, quantity)
+  const firstProjectStock = getProjectStockFields(items[0])
 
   return {
     grnNumber: String(materialDocument),
     materialDocumentYear: materialYears[0] || '',
     material: materials[0],
+    purchaseOrder: String(items[0].PurchaseOrder || ''),
+    purchaseOrderItem: String(items[0].PurchaseOrderItem || ''),
     plant: plants[0],
     storageLocation: storageLocations[0],
     entryUnit: items[0].EntryUnit || 'EA',
@@ -498,7 +741,21 @@ const buildGrnDetailsFromItems = (materialDocument, items, rawBody) => {
     postingDate,
     documentDate,
     postingDateISO: toISODate(postingDate),
+    wbsElement: firstProjectStock.wbsElement,
+    inventorySpecialStockType: firstProjectStock.inventorySpecialStockType,
     items: items.map(normalizeGrnItem),
+  }
+}
+
+const getProjectStockFields = (item) => {
+  const inventorySpecialStockType = String(item?.InventorySpecialStockType || '').trim()
+  const wbsElement = inventorySpecialStockType
+    ? String(item?.WBSElement || item?.SpecialStockIdfgWBSElement || '').trim()
+    : ''
+
+  return {
+    inventorySpecialStockType,
+    wbsElement,
   }
 }
 
@@ -508,6 +765,7 @@ const normalizeGrnItem = (item) => {
   const documentDate = header?.DocumentDate
   const serialNumbers = splitSerialNumbers(item.to_SerialNumbers)
   const quantity = parseQuantity(Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0)))
+  const projectStock = getProjectStockFields(item)
   validateSerialNumbers(serialNumbers, quantity)
 
   return {
@@ -515,6 +773,8 @@ const normalizeGrnItem = (item) => {
     grnNumber: String(item.MaterialDocument),
     materialDocumentYear: String(item.MaterialDocumentYear || ''),
     materialDocumentItem: String(item.MaterialDocumentItem || ''),
+    purchaseOrder: String(item.PurchaseOrder || ''),
+    purchaseOrderItem: String(item.PurchaseOrderItem || ''),
     material: String(item.Material || ''),
     plant: String(item.Plant || ''),
     storageLocation: String(item.StorageLocation || ''),
@@ -524,6 +784,8 @@ const normalizeGrnItem = (item) => {
     postingDate,
     documentDate,
     postingDateISO: toISODate(postingDate),
+    wbsElement: projectStock.wbsElement,
+    inventorySpecialStockType: projectStock.inventorySpecialStockType,
     raw: item,
   }
 }
@@ -551,6 +813,117 @@ const getAssetClassForMaterial = async (material) => {
     })
   }
   return { productGroup, assetClass }
+}
+
+const getPurchaseOrderItemDetails = async (grnItem) => {
+  const purchaseOrder = grnItem.purchaseOrder || grnItem.PurchaseOrder || grnItem.raw?.PurchaseOrder
+  const purchaseOrderItem = grnItem.purchaseOrderItem || grnItem.PurchaseOrderItem || grnItem.raw?.PurchaseOrderItem
+  if (!required(purchaseOrder) || !required(purchaseOrderItem)) return {}
+
+  const query = new URLSearchParams({
+    '$filter': [
+      `PurchaseOrder eq '${escapeODataString(purchaseOrder)}'`,
+      `PurchaseOrderItem eq '${escapeODataString(purchaseOrderItem)}'`,
+    ].join(' and '),
+    '$select': 'PurchaseOrder,PurchaseOrderItem,PurchaseOrderItemText,MaterialGroup',
+    '$format': 'json',
+  })
+  const body = await sapGet(`${ENDPOINTS.purchaseOrderItems}?${query}`, {
+    username: PO_USERNAME,
+    password: PO_PASSWORD,
+    authHeader: PO_AUTH_HEADER,
+  })
+  return getODataResults(body)[0] || getODataEntity(body)
+}
+
+const getPurchaseOrderItemText = async (grnItem) => {
+  const item = await getPurchaseOrderItemDetails(grnItem)
+  return compactText(item?.PurchaseOrderItemText, 50)
+}
+
+const getAssetClassMappingForGrnItem = async (grnItem) => {
+  try {
+    return await getAssetClassForMaterial(grnItem.material ?? grnItem.Material)
+  } catch (error) {
+    const poItem = await getPurchaseOrderItemDetails(grnItem)
+    const productGroup = String(poItem?.MaterialGroup || error.detail?.productGroup || '').trim()
+    const assetClass = PRODUCT_GROUP_ASSET_CLASS[productGroup]
+    if (!productGroup || !assetClass) throw error
+    return { productGroup, assetClass }
+  }
+}
+
+const enrichAssetDescriptionFromPo = async (asset, grnItem) => {
+  try {
+    const purchaseOrderItemText = compactText(grnItem.poDescription, 50) || await getPurchaseOrderItemText(grnItem)
+    if (!purchaseOrderItemText) return asset
+
+    return {
+      ...asset,
+      _General: {
+        ...asset._General,
+        FixedAssetDescription: purchaseOrderItemText,
+        AssetAdditionalDescription: purchaseOrderItemText,
+      },
+    }
+  } catch (error) {
+    console.warn(`Could not fetch PO item text for GRN ${grnItem.grnNumber}/${grnItem.materialDocumentItem}: ${error.message}`)
+    return asset
+  }
+}
+
+const enrichGrnItemDetails = async (grnItem) => {
+  const enriched = { ...grnItem }
+
+  try {
+    const mapping = await getAssetClassMappingForGrnItem(grnItem)
+    enriched.productGroup = mapping.productGroup
+    enriched.assetClass = mapping.assetClass
+  } catch (error) {
+    enriched.productGroup = error.detail?.productGroup || ''
+    enriched.assetClass = ''
+    enriched.mappingError = error.message
+  }
+
+  try {
+    enriched.poDescription = await getPurchaseOrderItemText(grnItem)
+  } catch (error) {
+    console.warn(`Could not fetch PO item text for GRN ${grnItem.grnNumber}/${grnItem.materialDocumentItem}: ${error.message}`)
+    enriched.poDescription = ''
+  }
+  return enriched
+}
+
+const enrichGrnDetails = async (grn) => {
+  const items = []
+  for (const item of grn.items || []) {
+    items.push(await enrichGrnItemDetails(item))
+  }
+
+  const firstItem = items[0] || await enrichGrnItemDetails(grn)
+  const uniqueMaterials = [...new Set(items.map((item) => item.material).filter(required))]
+  const serialNumbers = grn.serialNumbers?.length
+    ? grn.serialNumbers
+    : items.flatMap((item) => item.serialNumbers || [])
+  const quantity = grn.quantity ?? items.reduce((total, item) => total + Number(item.quantity || 0), 0)
+  return {
+    ...grn,
+    items: items.length ? items : grn.items,
+    material: grn.material || uniqueMaterials.join(', '),
+    plant: grn.plant || firstItem.plant || '',
+    storageLocation: grn.storageLocation || firstItem.storageLocation || '',
+    entryUnit: grn.entryUnit || firstItem.entryUnit || 'EA',
+    quantity,
+    serialNumbers,
+    productGroup: firstItem.productGroup || '',
+    assetClass: firstItem.assetClass || '',
+    mappingError: firstItem.mappingError || '',
+    poDescription: firstItem.poDescription || '',
+    purchaseOrder: firstItem.purchaseOrder || grn.purchaseOrder || '',
+    purchaseOrderItem: firstItem.purchaseOrderItem || grn.purchaseOrderItem || '',
+    wbsElement: grn.wbsElement || firstItem.wbsElement || '',
+    inventorySpecialStockType: grn.inventorySpecialStockType || firstItem.inventorySpecialStockType || '',
+  }
 }
 
 const getStockQuantity = (item) => {
@@ -658,10 +1031,10 @@ const buildAssetPayload = (asset, serialNumber, capitalizationDate) => {
   assetPayload._General = {
     ...assetPayload._General,
     AssetSerialNumber: serialNumber,
-    BaseUnitSAPCode: 'EA',
-    BaseUnitISOCode: 'EA',
+    BaseUnitSAPCode: assetPayload._General?.BaseUnitSAPCode || 'EA',
+    BaseUnitISOCode: assetPayload._General?.BaseUnitISOCode || assetPayload._General?.BaseUnitSAPCode || 'EA',
   }
-  assetPayload._Ledger[0].AssetCapitalizationDate = capitalizationDate
+  assetPayload._Ledger[0].AssetCapitalizationDate ||= capitalizationDate
 
   return assetPayload
 }
@@ -671,6 +1044,7 @@ const buildGoodsIssuePayload = (goodsIssue, assetNumbers, serialNumbers) => {
   const documentDate = parseSapDate(goodsIssue.DocumentDate)
   return {
     GoodsMovementCode: goodsIssue.GoodsMovementCode,
+    MaterialDocumentHeaderText: goodsIssue.MaterialDocumentHeaderText || undefined,
     PostingDate: postingDate ? toODataV2Date(postingDate) : goodsIssue.PostingDate,
     DocumentDate: documentDate ? toODataV2Date(documentDate) : goodsIssue.DocumentDate,
     to_MaterialDocumentItem: {
@@ -678,8 +1052,8 @@ const buildGoodsIssuePayload = (goodsIssue, assetNumbers, serialNumbers) => {
         Material: goodsIssue.Material,
         Plant: goodsIssue.Plant,
         StorageLocation: goodsIssue.StorageLocation,
-        GoodsMovementType: '241',
-        EntryUnit: 'EA',
+        GoodsMovementType: goodsIssue.GoodsMovementType || '241',
+        EntryUnit: goodsIssue.EntryUnit || 'EA',
         QuantityInEntryUnit: '1',
         MasterFixedAsset: assetNumber,
         to_SerialNumbers: {
@@ -695,8 +1069,10 @@ const buildGoodsIssuePayload = (goodsIssue, assetNumbers, serialNumbers) => {
 }
 
 const processGrnItem = async (grnItem, options = {}) => {
-  const { asset: requestedAsset, resumeAssetNumbers = [], persistProgress = false } = options
-  const { productGroup, assetClass } = await getAssetClassForMaterial(grnItem.material)
+  const { asset: requestedAsset, resumeAssetNumbers = [], persistProgress = false, preserveManualAsset = false } = options
+  const { productGroup, assetClass } = preserveManualAsset && required(requestedAsset?.AssetClass)
+    ? { productGroup: grnItem.productGroup || '', assetClass: String(requestedAsset.AssetClass) }
+    : await getAssetClassMappingForGrnItem(grnItem)
 
   if (!grnItem.postingDateISO) {
     throw Object.assign(new Error(`A valid GRN posting date is required for asset capitalization on ${grnItem.key}.`), {
@@ -704,16 +1080,19 @@ const processGrnItem = async (grnItem, options = {}) => {
     })
   }
 
-  const asset = mergeAssetTemplateForItem(requestedAsset, grnItem, assetClass)
+  const mergedAsset = mergeAssetTemplateForItem(requestedAsset, grnItem, assetClass, preserveManualAsset)
+  const asset = preserveManualAsset
+    ? mergedAsset
+    : await enrichAssetDescriptionFromPo(mergedAsset, grnItem)
   validatePayload({
     goodsIssue: {
-      GoodsMovementCode: '03',
+      GoodsMovementCode: grnItem.goodsMovementCode || '03',
       PostingDate: grnItem.postingDate,
       DocumentDate: grnItem.documentDate,
       Material: grnItem.material,
       Plant: grnItem.plant,
       StorageLocation: grnItem.storageLocation,
-      GoodsMovementType: '241',
+      GoodsMovementType: grnItem.goodsMovementType || '241',
       EntryUnit: grnItem.entryUnit,
       QuantityInEntryUnit: String(grnItem.quantity),
     },
@@ -759,6 +1138,9 @@ const processGrnItem = async (grnItem, options = {}) => {
         status: 'assets-created',
         assetNumbers: createdAssets.map((item) => item.masterFixedAsset),
         serialNumbers: grnItem.serialNumbers,
+        poDescription: grnItem.poDescription,
+        productGroup,
+        assetClass,
         material: grnItem.material,
         materialDocument: grnItem.grnNumber,
         materialDocumentYear: grnItem.materialDocumentYear,
@@ -770,12 +1152,15 @@ const processGrnItem = async (grnItem, options = {}) => {
   const assetNumbers = createdAssets.map((item) => item.masterFixedAsset)
   const goodsIssuePayload = buildGoodsIssuePayload(
     {
-      GoodsMovementCode: '03',
+      GoodsMovementCode: grnItem.goodsMovementCode || '03',
+      MaterialDocumentHeaderText: grnItem.materialDocumentHeaderText || '',
       PostingDate: grnItem.postingDate,
       DocumentDate: grnItem.documentDate,
       Material: grnItem.material,
       Plant: grnItem.plant,
       StorageLocation: grnItem.storageLocation,
+      GoodsMovementType: grnItem.goodsMovementType || '241',
+      EntryUnit: grnItem.entryUnit || 'EA',
     },
     assetNumbers,
     grnItem.serialNumbers,
@@ -804,6 +1189,38 @@ const processGrnItem = async (grnItem, options = {}) => {
   }
 }
 
+const applyManualGoodsIssueValues = (grnItem, goodsIssue, includeItemValues) => {
+  const postingDate = required(goodsIssue?.PostingDate) ? goodsIssue.PostingDate : grnItem.postingDate
+  const documentDate = required(goodsIssue?.DocumentDate) ? goodsIssue.DocumentDate : grnItem.documentDate
+  const manualItem = {
+    ...grnItem,
+    goodsMovementCode: required(goodsIssue?.GoodsMovementCode) ? goodsIssue.GoodsMovementCode : '03',
+    goodsMovementType: required(goodsIssue?.GoodsMovementType) ? goodsIssue.GoodsMovementType : '241',
+    materialDocumentHeaderText: goodsIssue?.MaterialDocumentHeaderText || '',
+    postingDate,
+    documentDate,
+    postingDateISO: toISODate(postingDate) || grnItem.postingDateISO,
+    plant: required(goodsIssue?.Plant) ? goodsIssue.Plant : grnItem.plant,
+    storageLocation: required(goodsIssue?.StorageLocation) ? goodsIssue.StorageLocation : grnItem.storageLocation,
+    entryUnit: required(goodsIssue?.EntryUnit) ? goodsIssue.EntryUnit : grnItem.entryUnit,
+  }
+
+  if (includeItemValues) {
+    manualItem.material = required(goodsIssue?.Material) ? goodsIssue.Material : grnItem.material
+    manualItem.quantity = required(goodsIssue?.QuantityInEntryUnit)
+      ? parseQuantity(goodsIssue.QuantityInEntryUnit)
+      : grnItem.quantity
+    manualItem.serialNumbers = required(goodsIssue?.SerialNumbers)
+      ? splitSerialNumbers(goodsIssue.SerialNumbers)
+      : grnItem.serialNumbers
+    manualItem.productGroup = goodsIssue?.ProductGroup || grnItem.productGroup || ''
+    manualItem.poDescription = goodsIssue?.PurchaseOrderDescription || grnItem.poDescription || ''
+    validateSerialNumbers(manualItem.serialNumbers, manualItem.quantity)
+  }
+
+  return manualItem
+}
+
 const orchestrate = async (request) => {
   const payload = await readJson(request)
   const { goodsIssue: requestedGoodsIssue, asset } = payload
@@ -820,10 +1237,32 @@ const orchestrate = async (request) => {
 
   const results = []
   for (const [index, grnItem] of grnItems.entries()) {
-    results.push(await processGrnItem(grnItem, {
-      asset,
-      resumeAssetNumbers: index === 0 ? resumeAssetNumbers : [],
-    }))
+    const manualGrnItem = applyManualGoodsIssueValues(grnItem, requestedGoodsIssue, grnItems.length === 1)
+    try {
+      const result = await processGrnItem(manualGrnItem, {
+        asset,
+        resumeAssetNumbers: index === 0 ? resumeAssetNumbers : [],
+        preserveManualAsset: true,
+      })
+      await writeCboProcessLog({
+        grnItem: manualGrnItem,
+        status: 'Success',
+        assetNumbers: result.assetNumbers,
+        productGroup: result.productGroup,
+        assetClass: result.assetClass,
+        source: 'manual',
+      })
+      results.push(result)
+    } catch (error) {
+      await writeCboProcessLog({
+        grnItem: manualGrnItem,
+        status: 'Failed',
+        errorMessage: error.message,
+        assetNumbers: error.partialResult?.assetNumbers || [],
+        source: 'manual',
+      })
+      throw error
+    }
   }
 
   const response = {
@@ -847,6 +1286,7 @@ const orchestrate = async (request) => {
   return response
 }
 
+/* AUTOMATION DISABLED: Uncomment this block to restore automatic/bulk GRN processing.
 const fetchNewGoodsReceiptItems = async () => {
   const query = new URLSearchParams({
     '$filter': "GoodsMovementType eq '101'",
@@ -877,16 +1317,15 @@ const hasCreatedAssetsForQuantity = (item, quantity) => getStoredAssetNumbers(it
 
 const processedStoreHasItem = (store, key, quantity = 0) => {
   const item = store.items?.[key]
-  return item?.status === 'success'
+  return item?.status === 'success' || hasCreatedAssetsForQuantity(item, quantity)
 }
 
 const processedStoreItemStatus = (store, key, quantity = 0) => {
   const item = store.items?.[key]
   if (!item) return 'Pending'
-  if (item.status === 'success') return 'Goods Issue Posted'
-  if (item.status === 'assets-created' || hasCreatedAssetsForQuantity(item, quantity)) return 'Assets Created - Posting Pending'
+  if (item.status === 'success' || item.status === 'assets-created' || hasCreatedAssetsForQuantity(item, quantity)) return 'Asset Already Created'
   if (item.status === 'failed') return 'Failed'
-  return item.status || 'Pending'
+  return item.status || 'Asset Already Created'
 }
 
 const buildGrnMonitorRow = async (item, store) => {
@@ -928,7 +1367,7 @@ const buildGrnMonitorRow = async (item, store) => {
     storageLocation: String(item.StorageLocation || ''),
     postingDate: getItemPostingDate(item),
     status: productError ? 'Failed' : processedStoreItemStatus(store, key, quantity),
-    error: productError || (processedItem?.status === 'success' ? '' : processedItem?.error || ''),
+    error: productError || (hasCreatedAssetsForQuantity(processedItem, quantity) ? '' : processedItem?.error || ''),
     processed: processedItem,
   }
 }
@@ -959,6 +1398,20 @@ const recordSchedulerFailure = async (item, error, source = 'scheduler') => {
   const existingItem = (await loadProcessedStore()).items?.[key] || {}
   const assetNumbers = error.partialResult?.assetNumbers || existingItem.partialResult?.assetNumbers || existingItem.assetNumbers || []
   const serialNumbers = error.partialResult?.serialNumbers || existingItem.partialResult?.serialNumbers || existingItem.serialNumbers || []
+  let mapping = { productGroup: existingItem.productGroup || '', assetClass: existingItem.assetClass || '' }
+  try {
+    mapping = await getAssetClassMappingForGrnItem(item)
+  } catch {
+    mapping = { productGroup: error.detail?.productGroup || mapping.productGroup, assetClass: mapping.assetClass }
+  }
+  let poDescription = existingItem.poDescription || ''
+  if (!poDescription) {
+    try {
+      poDescription = await getPurchaseOrderItemText(item)
+    } catch {
+      poDescription = ''
+    }
+  }
   const failureRecord = {
     ...existingItem,
     status: 'failed',
@@ -974,6 +1427,9 @@ const recordSchedulerFailure = async (item, error, source = 'scheduler') => {
     assetNumbers,
     serialNumbers,
     inventoryBalance: await getInventoryBalanceSafe(item),
+    productGroup: mapping.productGroup,
+    assetClass: mapping.assetClass,
+    poDescription,
   }
 
   console.error(
@@ -984,6 +1440,16 @@ const recordSchedulerFailure = async (item, error, source = 'scheduler') => {
     ].join(' - '),
   )
 
+  await writeCboProcessLog({
+    grnItem: item,
+    status: 'Failed',
+    errorMessage: error.message,
+    assetNumbers,
+    productGroup: mapping.productGroup,
+    assetClass: mapping.assetClass,
+    inventoryBalance: failureRecord.inventoryBalance,
+    source,
+  })
   await updateProcessedItem(key, failureRecord)
 }
 
@@ -1002,6 +1468,15 @@ const processDiscoveredGoodsReceiptItem = async (item, options = {}) => {
 
   const result = await processGrnItem(grnItem, { persistProgress: true, resumeAssetNumbers })
   const inventoryBalance = await getInventoryBalanceSafe(grnItem)
+  const cboLog = await writeCboProcessLog({
+    grnItem,
+    status: 'Success',
+    assetNumbers: result.assetNumbers,
+    productGroup: result.productGroup,
+    assetClass: result.assetClass,
+    inventoryBalance,
+    source,
+  })
   await updateProcessedItem(grnItem.key, {
     status: 'success',
     source,
@@ -1017,11 +1492,13 @@ const processDiscoveredGoodsReceiptItem = async (item, options = {}) => {
     inventoryBalance,
     productGroup: result.productGroup,
     assetClass: result.assetClass,
+    poDescription: grnItem.poDescription,
     error: undefined,
     detail: undefined,
     failedPayload: undefined,
     partialResult: undefined,
     goodsIssueResponse: result.goodsIssueResponse,
+    cboLog,
   })
   return result
 }
@@ -1038,6 +1515,7 @@ const processPendingTodayGrns = async (source = 'manual-bulk') => {
     const quantity = Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0))
     const existingItem = store.items?.[key]
     if (processedStoreHasItem(store, key, quantity)) {
+      await ensureStoredItemCboLog(key, item, existingItem, existingItem?.source || source)
       const assetNumbers = getStoredAssetNumbers(existingItem)
       const serialNumbers = existingItem?.serialNumbers || splitSerialNumbers(item.to_SerialNumbers)
       skipped.push({
@@ -1119,6 +1597,7 @@ const runGoodsReceiptScheduler = async () => {
       const key = materialItemKey(item)
       const quantity = Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0))
       if (processedStoreHasItem(store, key, quantity)) {
+        await ensureStoredItemCboLog(key, item, store.items?.[key], store.items?.[key]?.source || 'scheduler')
         skippedCount += 1
         continue
       }
@@ -1157,6 +1636,7 @@ const startGoodsReceiptScheduler = () => {
   }, 0)
   setInterval(runGoodsReceiptScheduler, SCHEDULER_INTERVAL_MS)
 }
+*/
 
 const server = http.createServer(async (request, response) => {
   const pathname = new URL(request.url, `http://${request.headers.host || 'localhost'}`).pathname
@@ -1193,6 +1673,7 @@ const server = http.createServer(async (request, response) => {
     return
   }
 
+  /* AUTOMATION DISABLED: Uncomment these routes with the automation block above.
   if (request.method === 'POST' && pathname === '/api/today-grns') {
     try {
       sendJson(response, 200, await getTodayGrnMonitor())
@@ -1218,6 +1699,7 @@ const server = http.createServer(async (request, response) => {
     }
     return
   }
+  */
 
   const frontendPath = join(__dirname, '..', 'client', 'dist', 'index.html')
 
@@ -1237,5 +1719,6 @@ sendJson(response, 404, {
 
 server.listen(PORT, () => {
   console.log(`Asset creation API running on http://localhost:${PORT}`)
-  startGoodsReceiptScheduler()
+  // AUTOMATION DISABLED: Uncomment after restoring the automation block above.
+  // startGoodsReceiptScheduler()
 })

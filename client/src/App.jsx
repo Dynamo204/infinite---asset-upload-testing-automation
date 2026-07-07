@@ -1,10 +1,12 @@
-const API_BASE_URL =
-  'https://asset-automation.cfapps.eu10-005.hana.ondemand.com'
+//const API_BASE_URL =
+  //'https://asset-automation.cfapps.eu10-005.hana.ondemand.com'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const initialGoodsIssue = {
   GrnNumber: '',
+  ProductGroup: '',
+  PurchaseOrderDescription: '',
   GoodsMovementCode: '03',
   PostingDate: '',
   DocumentDate: '',
@@ -13,6 +15,8 @@ const initialGoodsIssue = {
   Plant: 'IN07',
   StorageLocation: 'IN07',
   GoodsMovementType: '241',
+  WBSElement: '',
+  InventorySpecialStockType: '',
   EntryUnit: 'EA',
   QuantityInEntryUnit: '',
   MasterFixedAsset: '',
@@ -81,13 +85,6 @@ const Field = ({ label, value, onChange, required, type = 'text', readOnly = fal
   </label>
 )
 
-const Payload = ({ title, value }) => (
-  <details className="payload" open>
-    <summary>{title}</summary>
-    <pre>{JSON.stringify(value, null, 2)}</pre>
-  </details>
-)
-
 const formatDateTime = (value) => {
   if (!value) return ''
   const date = new Date(value)
@@ -132,40 +129,78 @@ const SerialAssetList = ({ pairs = [], assetNumbers = [] }) => {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState('goods')
+  const [activeTab, setActiveTab] = useState('launch')
   const [goodsIssue, setGoodsIssue] = useState(initialGoodsIssue)
   const [asset, setAsset] = useState(initialAsset)
   const [status, setStatus] = useState({ type: 'idle', message: '' })
   const [result, setResult] = useState(null)
   const [errorDetail, setErrorDetail] = useState(null)
   const [resumeAssetNumbers, setResumeAssetNumbers] = useState([])
+  const [projectStockReadOnly, setProjectStockReadOnly] = useState(true)
   const [grnLoading, setGrnLoading] = useState(false)
+  /* AUTOMATION DISABLED: Uncomment this block to restore automatic GRN processing.
   const [todayGrns, setTodayGrns] = useState([])
   const [automaticallyProcessed, setAutomaticallyProcessed] = useState([])
   const [bulkResult, setBulkResult] = useState(null)
   const [monitorLoading, setMonitorLoading] = useState(false)
   const [bulkProcessing, setBulkProcessing] = useState(false)
+  */
+  const [grnInfo, setGrnInfo] = useState({
+    productGroup: '',
+    assetClass: '',
+    poDescription: '',
+    mappingError: '',
+  })
 
   const assetNumbers = useMemo(() => result?.assetNumbers || [], [result])
   const serialNumbers = useMemo(() => parseSerialNumbers(goodsIssue.SerialNumbers), [goodsIssue.SerialNumbers])
 
   const applyGrnDetails = (body) => {
+    const items = Array.isArray(body.items) ? body.items : []
+    const firstItem = items[0] || {}
+    const itemSerialNumbers = items.flatMap((item) => item.serialNumbers || [])
+    const fetchedSerialNumbers = body.serialNumbers?.length ? body.serialNumbers : itemSerialNumbers
+    const fetchedQuantity = body.quantity ?? items.reduce((total, item) => total + Number(item.quantity || 0), 0)
+    const fetchedMaterials = [...new Set(items.map((item) => item.material).filter(Boolean))]
+    const fetchedMaterial = body.material || fetchedMaterials.join(', ')
+    const inventorySpecialStockType = body.inventorySpecialStockType || firstItem.inventorySpecialStockType || ''
+    const wbsElement = inventorySpecialStockType
+      ? body.wbsElement || firstItem.wbsElement || ''
+      : ''
+
     setGoodsIssue((current) => ({
       ...current,
-      PostingDate: body.postingDate,
-      DocumentDate: body.documentDate,
-      Material: body.material,
-      Plant: body.plant,
-      StorageLocation: body.storageLocation,
-      EntryUnit: body.entryUnit,
-      QuantityInEntryUnit: String(body.quantity),
-      SerialNumbers: body.serialNumbers.join('\n'),
+      ProductGroup: body.productGroup || '',
+      PurchaseOrderDescription: body.poDescription || '',
+      PostingDate: body.postingDate || firstItem.postingDate || '',
+      DocumentDate: body.documentDate || firstItem.documentDate || '',
+      Material: fetchedMaterial,
+      Plant: body.plant || firstItem.plant || current.Plant,
+      StorageLocation: body.storageLocation || firstItem.storageLocation || current.StorageLocation,
+      EntryUnit: body.entryUnit || firstItem.entryUnit || current.EntryUnit || 'EA',
+      QuantityInEntryUnit: fetchedQuantity > 0 ? String(fetchedQuantity) : '',
+      SerialNumbers: fetchedSerialNumbers.join('\n'),
+      InventorySpecialStockType: inventorySpecialStockType,
+      WBSElement: wbsElement,
     }))
+    setProjectStockReadOnly(true)
     setAsset((current) => ({
       ...current,
-      _General: { ...current._General, AssetSerialNumber: body.serialNumbers[0] || '' },
+      AssetClass: body.assetClass || current.AssetClass,
+      _General: {
+        ...current._General,
+        FixedAssetDescription: body.poDescription || current._General.FixedAssetDescription,
+        AssetAdditionalDescription: body.poDescription || current._General.AssetAdditionalDescription,
+        AssetSerialNumber: fetchedSerialNumbers[0] || '',
+      },
       _Ledger: [{ ...current._Ledger[0], AssetCapitalizationDate: body.postingDateISO }],
     }))
+    setGrnInfo({
+      productGroup: body.productGroup || '',
+      assetClass: body.assetClass || '',
+      poDescription: body.poDescription || '',
+      mappingError: body.mappingError || '',
+    })
   }
 
   const getGrn = async () => {
@@ -176,19 +211,23 @@ function App() {
 
     setGrnLoading(true)
     try {
-      //const response = await fetch('/api/grn-details', {
-      const response = await fetch(`${API_BASE_URL}/api/grn-details`, {
-  method: 'POST',
-  headers: { 'content-type': 'application/json' },
-  body: JSON.stringify({ grnNumber: goodsIssue.GrnNumber }),
-})
+      //const response = await fetch(`${API_BASE_URL}/api/grn-details`, {
+        const response = await fetch(`http://localhost:4000/api/grn-details`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ grnNumber: goodsIssue.GrnNumber }),
+      })
       const body = await response.json()
       if (!response.ok) {
         throw new Error(body.error || 'Could not fetch GRN details.')
       }
 
       applyGrnDetails(body)
-      setStatus({ type: 'success', message: `Loaded GRN ${body.grnNumber}: ${body.quantity} serial-managed item(s).` })
+      const fetchedQuantity = body.quantity ?? (body.items || []).reduce(
+        (total, item) => total + Number(item.quantity || 0),
+        0,
+      )
+      setStatus({ type: 'success', message: `Loaded GRN ${body.grnNumber}: ${fetchedQuantity} serial-managed item(s).` })
     } catch (error) {
       setStatus({ type: 'warning', message: error.message })
     } finally {
@@ -196,11 +235,12 @@ function App() {
     }
   }
 
+  /* AUTOMATION DISABLED: Uncomment this block to restore automatic GRN monitoring.
   const getTodayGrns = useCallback(async ({ silent = false } = {}) => {
     if (!silent) setMonitorLoading(true)
     try {
-      //const response = await fetch('/api/today-grns', {
-      const response = await fetch(`${API_BASE_URL}/api/today-grns`, {
+      //const response = await fetch(`${API_BASE_URL}/api/today-grns`, {
+        const response = await fetch(`http://localhost:4000/api/today-grns`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
       })
@@ -226,29 +266,7 @@ function App() {
       window.clearInterval(refreshTimer)
     }
   }, [getTodayGrns])
-
-  const goodsPayload = useMemo(
-    () => ({
-      GoodsMovementCode: goodsIssue.GoodsMovementCode,
-      PostingDate: goodsIssue.PostingDate,
-      DocumentDate: goodsIssue.DocumentDate,
-      to_MaterialDocumentItem: {
-        results: (serialNumbers.length > 0 ? serialNumbers : ['']).map((serialNumber, index) => ({
-          Material: goodsIssue.Material,
-          Plant: goodsIssue.Plant,
-          StorageLocation: goodsIssue.StorageLocation,
-          GoodsMovementType: goodsIssue.GoodsMovementType,
-          EntryUnit: goodsIssue.EntryUnit,
-          QuantityInEntryUnit: '1',
-          MasterFixedAsset: assetNumbers[index] || '<created asset will be assigned>',
-          to_SerialNumbers: {
-            results: serialNumber ? [{ SerialNumber: serialNumber }] : [],
-          },
-        })),
-      },
-    }),
-    [assetNumbers, goodsIssue, serialNumbers],
-  )
+  */
 
   const setGoods = (field, value) => setGoodsIssue((current) => ({ ...current, [field]: value }))
   const setAssetTop = (field, value) => setAsset((current) => ({ ...current, [field]: value }))
@@ -286,6 +304,17 @@ function App() {
         },
       ],
     }))
+  const setGrnInfoField = (field, value) =>
+    setGrnInfo((current) => ({ ...current, [field]: value }))
+  const setFirstSerialNumber = (value) => {
+    setAssetSection('_General', 'AssetSerialNumber', value)
+    setGoodsIssue((current) => {
+      const values = parseSerialNumbers(current.SerialNumbers)
+      if (values.length > 0) values[0] = value
+      else if (value) values.push(value)
+      return { ...current, SerialNumbers: values.join('\n') }
+    })
+  }
   const createAll = async () => {
     setResult(null)
     setErrorDetail(null)
@@ -306,8 +335,9 @@ function App() {
     setStatus({ type: 'running', message: 'Creating assets and posting the 241 goods issue...' })
 
     try {
-       //const response = await fetch('/api/create-goods-issue-with-assets', {
-      const response = await fetch(`${API_BASE_URL}/api/create-goods-issue-with-assets`, {
+      //const response = await fetch(`${API_BASE_URL}/api/create-goods-issue-with-assets`, {
+       const response = await fetch(`http://localhost:4000/api/create-goods-issue-with-assets`, {
+
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ goodsIssue, asset, resumeAssetNumbers }),
@@ -329,7 +359,7 @@ function App() {
         type: 'success',
         message: `Created ${body.assetNumbers.length} assets and posted the goods issue.`,
       })
-      setActiveTab('goods')
+      setActiveTab('manualGoods')
     } catch (error) {
       const partialAssetNumbers = error.partialResult?.assetNumbers || []
       const recoverableAssets = partialAssetNumbers.length === quantity
@@ -348,14 +378,16 @@ function App() {
     }
   }
 
+  /* AUTOMATION DISABLED: Uncomment this block to restore bulk automatic asset creation.
   const createPendingAssets = async () => {
     setBulkProcessing(true)
     setBulkResult(null)
     setStatus({ type: 'running', message: 'Creating assets for pending GRNs...' })
 
     try {
-      //const response = await fetch('/api/process-pending-grns', {
-      const response = await fetch(`${API_BASE_URL}/api/process-pending-grns`, {
+      //const response = await fetch(`${API_BASE_URL}/api/process-pending-grns`, {
+       const response = await fetch(`http://localhost:4000/api/process-pending-grns`, {
+
         method: 'POST',
         headers: { 'content-type': 'application/json' },
       })
@@ -377,51 +409,83 @@ function App() {
       setBulkProcessing(false)
     }
   }
+  */
 
   const openAssetCreation = () => {
     setAsset((current) => ({
       ...current,
       _General: { ...current._General, BaseUnitSAPCode: 'EA', BaseUnitISOCode: 'EA' },
     }))
-    setActiveTab('assets')
+    setActiveTab('manualAssets')
   }
+
+  const isManualPage = activeTab === 'manualGoods' || activeTab === 'manualAssets'
 
   return (
     <main className="app-shell">
       <section className="workspace">
         <header className="topbar">
           <div>
-            <p className="eyebrow">SAP Asset Flow</p>
-            <h1>Goods Issue with Asset Creation</h1>
+            <p className="eyebrow">SAP Fiori Asset Automation</p>
+            <h1>{activeTab === 'automatic' ? 'Automatic GRN Processing' : isManualPage ? 'Manual Asset Processing' : 'Asset Upload Automation'}</h1>
           </div>
-          <button className="primary" type="button" onClick={createAll} disabled={status.type === 'running' || grnLoading}>
-            {status.type === 'running' ? 'Creating...' : grnLoading ? 'Fetching GRN...' : 'Create Assets'}
-          </button>
+          <div className="topbar-actions">
+            {activeTab !== 'launch' ? (
+              <button className="secondary" type="button" onClick={() => setActiveTab('launch')}>
+                Home
+              </button>
+            ) : null}
+            {isManualPage ? (
+              <button className="primary" type="button" onClick={createAll} disabled={status.type === 'running' || grnLoading}>
+                {status.type === 'running' ? 'Creating...' : grnLoading ? 'Fetching GRN...' : 'Create Assets'}
+              </button>
+            ) : null}
+          </div>
         </header>
 
-        <nav className="tabs" aria-label="Workflow tabs">
-          <button type="button" className={activeTab === 'goods' ? 'active' : ''} onClick={() => setActiveTab('goods')}>
-            Goods Issue
-          </button>
-          <button type="button" className={activeTab === 'monitor' ? 'active' : ''} onClick={() => setActiveTab('monitor')}>
-            Today GRNs
-          </button>
-          <button type="button" className={activeTab === 'assets' ? 'active' : ''} onClick={openAssetCreation}>
-            Assets Creation
-          </button>
-        </nav>
-
-        {status.message ? <div className={`status ${status.type}`}>{status.message}</div> : null}
-        {errorDetail?.detail || errorDetail?.failedPayload ? (
-          <details className="error-detail" open>
-            <summary>SAP error detail</summary>
-            <pre>{JSON.stringify(errorDetail, null, 2)}</pre>
-          </details>
+        {activeTab === 'launch' ? (
+          <section className="launch-grid" aria-label="Process selection">
+            <button className="launch-tile" type="button" onClick={() => setActiveTab('manualGoods')}>
+              <span className="tile-kicker">Manual Process</span>
+              <strong>Enter GRN and create asset flow</strong>
+              <small>Fetch GRN details, create assets, post goods issue, and map material group to asset class.</small>
+            </button>
+            {/* AUTOMATION DISABLED: Uncomment this tile with the automatic-process panel below.
+            <button className="launch-tile" type="button" onClick={() => setActiveTab('automatic')}>
+              <span className="tile-kicker">Automatic Process</span>
+              <strong>Today GRNs and scheduler results</strong>
+              <small>Use the existing automated process controls and monitor success or failure messages.</small>
+            </button>
+            */}
+          </section>
         ) : null}
 
-        {activeTab === 'goods' ? (
-          <section className="panel">
-            <div className="form-grid">
+        {isManualPage ? (
+          <nav className="tabs" aria-label="Manual workflow tabs">
+            <button type="button" className={activeTab === 'manualGoods' ? 'active' : ''} onClick={() => setActiveTab('manualGoods')}>
+              Goods Issue
+            </button>
+            <button type="button" className={activeTab === 'manualAssets' ? 'active' : ''} onClick={openAssetCreation}>
+              Asset Master
+            </button>
+          </nav>
+        ) : null}
+
+        {status.message ? <div className={`status ${status.type}`}>{status.message}</div> : null}
+        {activeTab === 'manualGoods' ? (
+          <section className="panel object-page">
+            <div className="object-header">
+              <div>
+                <p className="eyebrow">Manual Process</p>
+                <h2>Goods Receipt Details</h2>
+                <p className="subtle">Fetch GRN details, verify PO description and product group, then create assets.</p>
+              </div>
+              <button className="secondary" type="button" onClick={openAssetCreation}>
+                Asset Master
+              </button>
+            </div>
+            <div className="fiori-section-title">General Information</div>
+            <div className="form-grid compact">
               <div className="field-with-action">
                 <Field label="GRN Number" value={goodsIssue.GrnNumber} onChange={(value) => setGoods('GrnNumber', value)} required />
                 <button className="secondary" type="button" onClick={getGrn} disabled={grnLoading}>
@@ -429,30 +493,55 @@ function App() {
                 </button>
               </div>
               <Field label="Goods Movement Code" value={goodsIssue.GoodsMovementCode} onChange={(value) => setGoods('GoodsMovementCode', value)} required />
-              <Field label={grnLoading ? 'Posting Date (loading...)' : 'Posting Date'} value={goodsIssue.PostingDate} onChange={() => {}} required readOnly />
-              <Field label={grnLoading ? 'Document Date (loading...)' : 'Document Date'} value={goodsIssue.DocumentDate} onChange={() => {}} required readOnly />
+              <Field label={grnLoading ? 'Posting Date (loading...)' : 'Posting Date'} value={goodsIssue.PostingDate} onChange={(value) => setGoods('PostingDate', value)} required />
+              <Field label={grnLoading ? 'Document Date (loading...)' : 'Document Date'} value={goodsIssue.DocumentDate} onChange={(value) => setGoods('DocumentDate', value)} required />
               <Field label="Header Text" value={goodsIssue.MaterialDocumentHeaderText} onChange={(value) => setGoods('MaterialDocumentHeaderText', value)} />
-              <Field label="Material" value={goodsIssue.Material} onChange={() => {}} required readOnly />
-              <Field label="Plant" value={goodsIssue.Plant} onChange={() => {}} required readOnly />
-              <Field label="Storage Location" value={goodsIssue.StorageLocation} onChange={() => {}} required readOnly />
-              <Field label="Movement Type" value={goodsIssue.GoodsMovementType} onChange={() => {}} required readOnly />
-              <Field label="Entry Unit" value={goodsIssue.EntryUnit} onChange={() => {}} required readOnly />
-              <Field label="Quantity" type="number" value={goodsIssue.QuantityInEntryUnit} onChange={() => {}} required readOnly />
-              <Field label="Master Fixed Asset" value={goodsIssue.MasterFixedAsset} onChange={(value) => setGoods('MasterFixedAsset', value)} required readOnly={assetNumbers.length > 0} />
-              <Field label="Serial Numbers" value={goodsIssue.SerialNumbers} onChange={() => {}} required readOnly multiline />
+              <Field label="Material" value={goodsIssue.Material} onChange={(value) => setGoods('Material', value)} required />
+              <Field label="Product Group" value={goodsIssue.ProductGroup} onChange={(value) => {
+                setGoods('ProductGroup', value)
+                setGrnInfoField('productGroup', value)
+              }} />
+              <Field label="PO Description" value={goodsIssue.PurchaseOrderDescription} onChange={(value) => {
+                setGoods('PurchaseOrderDescription', value)
+                setGrnInfoField('poDescription', value)
+              }} />
+              <Field label="Plant" value={goodsIssue.Plant} onChange={(value) => setGoods('Plant', value)} required />
+              <Field label="Storage Location" value={goodsIssue.StorageLocation} onChange={(value) => setGoods('StorageLocation', value)} required />
+              <Field label="Movement Type" value={goodsIssue.GoodsMovementType} onChange={(value) => setGoods('GoodsMovementType', value)} required />
+              <div className="field-with-action">
+                <Field label="WBS Element" value={goodsIssue.WBSElement} onChange={(value) => setGoods('WBSElement', value)} readOnly={projectStockReadOnly} />
+                <button className="secondary" type="button" onClick={() => setProjectStockReadOnly((current) => !current)}>
+                  {projectStockReadOnly ? 'Edit' : 'Lock'}
+                </button>
+              </div>
+              <Field label="Inventory Special Stock Type" value={goodsIssue.InventorySpecialStockType} onChange={(value) => setGoods('InventorySpecialStockType', value)} readOnly={projectStockReadOnly} />
+              <Field label="Entry Unit" value={goodsIssue.EntryUnit} onChange={(value) => setGoods('EntryUnit', value)} required />
+              <Field label="Quantity" type="number" value={goodsIssue.QuantityInEntryUnit} onChange={(value) => setGoods('QuantityInEntryUnit', value)} required />
+              <Field label="Master Fixed Asset" value={goodsIssue.MasterFixedAsset} onChange={(value) => setGoods('MasterFixedAsset', value)} required />
+              <Field label="Serial Numbers" value={goodsIssue.SerialNumbers} onChange={(value) => setGoods('SerialNumbers', value)} required multiline />
             </div>
-            <Payload title="Goods issue payload" value={goodsPayload} />
+            {grnInfo.mappingError ? <div className="inline-warning">{grnInfo.mappingError}</div> : null}
           </section>
         ) : null}
 
-        {activeTab === 'monitor' ? (
-          <section className="panel">
-            <div className="panel-actions">
-              <h2>Today's 101 GRNs</h2>
+        {/* AUTOMATION DISABLED: Uncomment this panel to restore automatic GRN controls.
+        {activeTab === 'automatic' ? (
+          <section className="panel list-report">
+            <div className="variant-bar">
+              <button className="variant-title" type="button">Standard</button>
+              <div className="search-wrap">
+                <input aria-label="Search" placeholder="Search" />
+              </div>
+              <button className="primary" type="button" onClick={() => getTodayGrns()} disabled={monitorLoading}>
+                {monitorLoading ? 'Loading...' : 'Go'}
+              </button>
+            </div>
+            <div className="panel-actions table-toolbar">
               <div>
-                <button className="secondary" type="button" onClick={() => getTodayGrns()} disabled={monitorLoading}>
-                  {monitorLoading ? 'Loading...' : 'Get GRNs'}
-                </button>
+                <h2>ASSET UPLOAD automations</h2>
+                <span className="view-name">Standard</span>
+              </div>
+              <div>
                 <button className="primary" type="button" onClick={createPendingAssets} disabled={bulkProcessing || monitorLoading}>
                   {bulkProcessing ? 'Creating...' : 'Create Assets'}
                 </button>
@@ -561,17 +650,39 @@ function App() {
             </section>
           </section>
         ) : null}
+        */}
 
-        {activeTab === 'assets' ? (
-          <section className="panel">
-            <h2>Fixed Asset</h2>
-            <div className="form-grid">
+        {activeTab === 'manualAssets' ? (
+          <section className="panel object-page">
+            <div className="object-header">
+              <div>
+                <p className="eyebrow">Manual Process</p>
+                <h2>Fixed Asset</h2>
+                <p className="subtle">Asset class, description, and capitalization date reflect the fetched GRN details.</p>
+              </div>
+              <button className="secondary" type="button" onClick={() => setActiveTab('manualGoods')}>
+                Goods Issue
+              </button>
+            </div>
+            <div className="fiori-section-title">Asset Master Data</div>
+            <div className="form-grid compact">
               <Field label="Company Code" value={asset.CompanyCode} onChange={(value) => setAssetTop('CompanyCode', value)} required />
+              <Field label="Product Group" value={grnInfo.productGroup} onChange={(value) => {
+                setGrnInfoField('productGroup', value)
+                setGoods('ProductGroup', value)
+              }} />
               <Field label="Asset Class" value={asset.AssetClass} onChange={(value) => setAssetTop('AssetClass', value)} required />
+              <Field label="PO Description" value={grnInfo.poDescription} onChange={(value) => {
+                setGrnInfoField('poDescription', value)
+                setGoods('PurchaseOrderDescription', value)
+              }} />
               <Field label="Description" value={asset._General.FixedAssetDescription} onChange={(value) => setAssetSection('_General', 'FixedAssetDescription', value)} required />
               <Field label="Additional Description" value={asset._General.AssetAdditionalDescription} onChange={(value) => setAssetSection('_General', 'AssetAdditionalDescription', value)} />
-              <Field label="Serial Number (first GRN item)" value={asset._General.AssetSerialNumber} onChange={() => {}} required readOnly />
-              <Field label="Base Unit of Measure" value={asset._General.BaseUnitSAPCode} onChange={() => {}} required readOnly />
+              <Field label="Serial Number (first GRN item)" value={asset._General.AssetSerialNumber} onChange={setFirstSerialNumber} required />
+              <Field label="Base Unit of Measure" value={asset._General.BaseUnitSAPCode} onChange={(value) => {
+                setAssetSection('_General', 'BaseUnitSAPCode', value)
+                setAssetSection('_General', 'BaseUnitISOCode', value)
+              }} required />
               <Field label="Cost Center" value={asset._AccountAssignment.CostCenter} onChange={(value) => setAssetSection('_AccountAssignment', 'CostCenter', value)} required />
               <Field label="Asset Plant" value={asset._AccountAssignment.Plant} onChange={(value) => setAssetSection('_AccountAssignment', 'Plant', value)} required />
               <Field label="Inventory" value={asset._Inventory.Inventory} onChange={(value) => setAssetSection('_Inventory', 'Inventory', value)} />
@@ -583,7 +694,6 @@ function App() {
               <Field label="Useful Life Years" value={asset._Ledger[0]._Valuation[0]._TimeBasedValuation[0].PlannedUsefulLifeInYears} onChange={(value) => setTimeValuation('PlannedUsefulLifeInYears', value)} />
             </div>
 
-            <Payload title="Asset payload" value={asset} />
           </section>
         ) : null}
 
