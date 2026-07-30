@@ -4,6 +4,10 @@ import { existsSync, readFileSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import {
+  buildNonSerialProjectStockTransferPayload,
+  createSingleAssetForNonSerial,
+} from './server-non-serial.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const envLocalPath = join(__dirname, '..', '.env')
@@ -44,6 +48,8 @@ const GRN_FETCH_TOP = Number.isInteger(configuredGrnFetchTop) && configuredGrnFe
 const PROCESSED_STORE_PATH = join(__dirname, 'data', 'processed-grn-items.json')
 
 const ENDPOINTS = {
+  materialDocumentHeaders:
+    '/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader',
   goodsIssue:
     '/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader',
   materialDocumentItems:
@@ -58,8 +64,8 @@ const ENDPOINTS = {
     '/sap/opu/odata4/sap/api_fixedasset/srvd_a2x/sap/fixedasset/0001/FixedAsset/SAP__self.CreateMasterFixedAsset',
   purchaseOrderItems:
     '/sap/opu/odata4/sap/api_purchaseorder_2/srvd_a2x/sap/purchaseorder/0001/PurchaseOrderItem',
-  assetUploadAutomation:
-    '/sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION',
+  //assetUploadAutomation:
+   // '/sap/opu/odata/sap/YY1_ASSETUPLOADAUTOMATION_CDS/YY1_ASSETUPLOADAUTOMATION',
 }
 
 const CBO_FIELDS = {
@@ -364,6 +370,8 @@ const splitSerialNumbers = (value) => {
 }
 
 const validateSerialNumbers = (serialNumbers, quantity) => {
+  if (serialNumbers.length === 0) return
+
   if (serialNumbers.length !== quantity) {
     throw Object.assign(
       new Error(`Maintain serial numbers for total quantity. Quantity is ${quantity}, but ${serialNumbers.length} serial number(s) were provided.`),
@@ -430,6 +438,20 @@ const materialItemKey = (item) =>
     item.MaterialDocumentYear,
     item.MaterialDocumentItem,
   ].map((value) => String(value || '').trim()).join('/')
+
+const uniqueByMaterialDocumentItem = (items = []) => {
+  const seen = new Set()
+  return items.filter((item, index) => {
+    const key = materialItemKey(item)
+    const hasStableKey = required(item?.MaterialDocumentItem)
+    const uniqueKey = hasStableKey ? key : `__index_${index}`
+    if (seen.has(uniqueKey)) return false
+    seen.add(uniqueKey)
+    return true
+  })
+}
+
+const uniqueSerialNumbers = (serialNumbers = []) => [...new Set(serialNumbers.map(String).filter(required))]
 
 const loadProcessedStore = async () => {
   try {
@@ -665,10 +687,7 @@ const mergeAssetTemplateForItem = (asset, grnItem, assetClass, preserveManualVal
   return assetPayload
 }
 
-const getGrnDetails = async (materialDocument) => {
-  if (!required(materialDocument)) {
-    throw Object.assign(new Error('GRN number is mandatory.'), { statusCode: 400 })
-  }
+const fetchGrnItemsFromMaterialDocumentItems = async (materialDocument) => {
   const query = new URLSearchParams({
     '$filter': `MaterialDocument eq '${escapeODataString(materialDocument)}' and GoodsMovementType eq '101'`,
     '$expand': 'to_MaterialDocumentHeader,to_SerialNumbers',
@@ -676,7 +695,51 @@ const getGrnDetails = async (materialDocument) => {
     '$format': 'json',
   })
   const body = await sapGet(`${ENDPOINTS.materialDocumentItems}?${query}`)
-  const items = getODataResults(body)
+  return {
+    body,
+    items: getODataResults(body),
+  }
+}
+
+const fetchGrnItemsFromMaterialDocumentHeader = async (materialDocument) => {
+  const query = new URLSearchParams({
+    '$filter': `MaterialDocument eq '${escapeODataString(materialDocument)}'`,
+    '$expand': 'to_MaterialDocumentItem/to_SerialNumbers',
+    '$orderby': 'MaterialDocumentYear desc',
+    '$format': 'json',
+  })
+  const body = await sapGet(`${ENDPOINTS.materialDocumentHeaders}?${query}`)
+  const headers = getODataResults(body)
+  const items = headers.flatMap((header) => {
+    const { to_MaterialDocumentItem: _items, ...headerFields } = header
+    return getODataResults(header.to_MaterialDocumentItem)
+      .filter((item) => String(item.GoodsMovementType || '').trim() === '101')
+      .map((item) => ({
+        ...item,
+        to_MaterialDocumentHeader: { results: [headerFields] },
+      }))
+  })
+
+  return { body, items }
+}
+
+const fetchGrnItems = async (materialDocument) => {
+  try {
+    const result = await fetchGrnItemsFromMaterialDocumentHeader(materialDocument)
+    if (result.items.length > 0) return result
+  } catch (error) {
+    console.warn(`Could not read GRN ${materialDocument} from material document header: ${error.message}`)
+  }
+
+  return fetchGrnItemsFromMaterialDocumentItems(materialDocument)
+}
+
+const getGrnDetails = async (materialDocument) => {
+  if (!required(materialDocument)) {
+    throw Object.assign(new Error('GRN number is mandatory.'), { statusCode: 400 })
+  }
+  const { body, items: fetchedItems } = await fetchGrnItems(materialDocument)
+  const items = uniqueByMaterialDocumentItem(fetchedItems)
   if (items.length === 0) {
     throw Object.assign(new Error(`No 101 goods receipt was found for GRN ${materialDocument}.`), {
       statusCode: 404,
@@ -721,7 +784,7 @@ const buildGrnDetailsFromItems = (materialDocument, items, rawBody) => {
     })
   }
 
-  const serialNumbers = items.flatMap((item) => splitSerialNumbers(item.to_SerialNumbers))
+  const serialNumbers = uniqueSerialNumbers(items.flatMap((item) => splitSerialNumbers(item.to_SerialNumbers)))
   const quantityValue = items.reduce((total, item) => total + Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0)), 0)
   const quantity = parseQuantity(quantityValue)
   validateSerialNumbers(serialNumbers, quantity)
@@ -763,7 +826,7 @@ const normalizeGrnItem = (item) => {
   const header = getODataResults(item?.to_MaterialDocumentHeader)[0] ?? item?.to_MaterialDocumentHeader ?? item
   const postingDate = header?.PostingDate
   const documentDate = header?.DocumentDate
-  const serialNumbers = splitSerialNumbers(item.to_SerialNumbers)
+  const serialNumbers = uniqueSerialNumbers(splitSerialNumbers(item.to_SerialNumbers))
   const quantity = parseQuantity(Math.abs(Number(item.QuantityInEntryUnit ?? item.Quantity ?? 0)))
   const projectStock = getProjectStockFields(item)
   validateSerialNumbers(serialNumbers, quantity)
@@ -1068,8 +1131,207 @@ const buildGoodsIssuePayload = (goodsIssue, assetNumbers, serialNumbers) => {
   }
 }
 
+const isProjectStockItem = (grnItem) => String(grnItem?.inventorySpecialStockType || '').trim() === 'Q'
+
+const buildProjectStockTransferPayload = (grnItem) => {
+  const postingDate = parseSapDate(grnItem.postingDate)
+  const documentDate = parseSapDate(grnItem.documentDate)
+  const serialNumbers = uniqueSerialNumbers(grnItem.serialNumbers)
+  validateSerialNumbers(serialNumbers, grnItem.quantity)
+  return {
+    GoodsMovementCode: '04',
+    PostingDate: postingDate ? toODataV2Date(postingDate) : grnItem.postingDate,
+    DocumentDate: documentDate ? toODataV2Date(documentDate) : grnItem.documentDate,
+    to_MaterialDocumentItem: {
+      results: [
+        {
+          Material: grnItem.material,
+          Plant: grnItem.plant,
+          StorageLocation: grnItem.storageLocation,
+          GoodsMovementType: '411',
+          EntryUnit: grnItem.entryUnit || 'EA',
+          QuantityInEntryUnit: String(grnItem.quantity),
+          InventorySpecialStockType: grnItem.inventorySpecialStockType || undefined,
+          SpecialStockIdfgWBSElement: grnItem.wbsElement || undefined,
+          IssuingOrReceivingPlant: grnItem.plant,
+          IssuingOrReceivingStorageLoc: grnItem.storageLocation,
+          to_SerialNumbers: {
+            results: serialNumbers.map((serialNumber) => ({
+              SerialNumber: serialNumber,
+            })),
+          },
+        },
+      ],
+    },
+  }
+}
+
+const extractMaterialDocumentNumber = (payload) => {
+  const candidates = [
+    payload?.MaterialDocument,
+    payload?.d?.MaterialDocument,
+    payload?.value?.MaterialDocument,
+    getODataResults(payload)[0]?.MaterialDocument,
+  ]
+  return String(candidates.find(required) || '')
+}
+
+const fetchMaterialDocumentItems = async (materialDocument) => {
+  const query = new URLSearchParams({
+    '$filter': `MaterialDocument eq '${escapeODataString(materialDocument)}'`,
+    '$expand': 'to_MaterialDocumentHeader,to_SerialNumbers',
+    '$orderby': 'MaterialDocumentYear desc,MaterialDocumentItem asc',
+    '$format': 'json',
+  })
+  const body = await sapGet(`${ENDPOINTS.materialDocumentItems}?${query}`)
+  return {
+    body,
+    items: getODataResults(body),
+  }
+}
+
+const getItemQuantity = (item, fallbackQuantity = 0) =>
+  Math.abs(Number(item?.QuantityInEntryUnit ?? item?.Quantity ?? fallbackQuantity ?? 0))
+
+const isUnrestrictedStockItem = (item) => !required(item?.InventorySpecialStockType)
+
+const selectTransferPostingItem = (items, fallbackItem = {}) => {
+  const transferItems = uniqueByMaterialDocumentItem(items)
+    .filter((item) => String(item.GoodsMovementType || '').trim() === '411')
+  return transferItems.find(isUnrestrictedStockItem) || transferItems[0] || uniqueByMaterialDocumentItem(items)[0] || fallbackItem
+}
+
+const buildTransferPostingDetails = (materialDocument, items, fallbackItem = {}) => {
+  const item = selectTransferPostingItem(items, fallbackItem)
+  const header = getODataResults(item?.to_MaterialDocumentHeader)[0] ?? item?.to_MaterialDocumentHeader ?? item
+  const quantity = getItemQuantity(item, fallbackItem.quantity)
+  const serialNumbers = uniqueSerialNumbers(splitSerialNumbers(item.to_SerialNumbers))
+
+  return {
+    movementType: String(item.GoodsMovementType || '411'),
+    materialDocument: String(item.MaterialDocument || materialDocument || ''),
+    materialDocumentYear: String(item.MaterialDocumentYear || ''),
+    material: String(item.Material || fallbackItem.material || ''),
+    plant: String(item.Plant || fallbackItem.plant || ''),
+    storageLocation: String(item.StorageLocation || fallbackItem.storageLocation || ''),
+    inventorySpecialStockType: String(item.InventorySpecialStockType || ''),
+    quantity,
+    entryUnit: item.EntryUnit || fallbackItem.entryUnit || 'EA',
+    serialNumbers: serialNumbers.length ? serialNumbers : uniqueSerialNumbers(fallbackItem.serialNumbers || []),
+    postingDate: header?.PostingDate || fallbackItem.postingDate || '',
+    documentDate: header?.DocumentDate || fallbackItem.documentDate || '',
+    postingDateISO: toISODate(header?.PostingDate || fallbackItem.postingDate),
+  }
+}
+
+// A 241 following a 411 Q transfer must be posted against the receiving,
+// unrestricted-stock item.  Do not reuse the original 101 item's Q/WBS fields:
+// those describe the stock that was transferred out, not the stock available
+// for the goods issue.
+const buildUnrestrictedGoodsIssueItem = (grnItem, transferPosting) => ({
+  ...grnItem,
+  material: transferPosting.material || grnItem.material,
+  plant: transferPosting.plant || grnItem.plant,
+  storageLocation: transferPosting.storageLocation || grnItem.storageLocation,
+  entryUnit: transferPosting.entryUnit || grnItem.entryUnit,
+  // Keep the original serial order so asset N remains paired with serial N.
+  // The transfer validation above already proves these are the same serials.
+  serialNumbers: grnItem.serialNumbers,
+  inventorySpecialStockType: '',
+  wbsElement: '',
+})
+
+const assertProjectStockTransferReady = async (grnItem, materialDocument) => {
+  if (!required(materialDocument)) {
+    throw Object.assign(new Error('A successful 411 transfer material document is required before posting 241 for Project Stock.'), {
+      statusCode: 400,
+    })
+  }
+
+  const transferDocument = await fetchMaterialDocumentItems(materialDocument)
+  const transferItems = uniqueByMaterialDocumentItem(transferDocument.items)
+    .filter((item) => String(item.GoodsMovementType || '').trim() === '411')
+  const unrestrictedItem = transferItems.find(isUnrestrictedStockItem)
+  if (!unrestrictedItem) {
+    throw Object.assign(new Error(`411 material document ${materialDocument} does not show unrestricted stock available for the 241 goods issue.`), {
+      statusCode: 400,
+      detail: transferDocument.body,
+    })
+  }
+
+  const transferredQuantity = parseQuantity(getItemQuantity(unrestrictedItem))
+  if (transferredQuantity !== grnItem.quantity) {
+    throw Object.assign(new Error(`411 transferred quantity ${transferredQuantity} does not match GRN quantity ${grnItem.quantity}.`), {
+      statusCode: 400,
+      detail: transferDocument.body,
+    })
+  }
+
+  const transferredSerialNumbers = uniqueSerialNumbers(splitSerialNumbers(unrestrictedItem.to_SerialNumbers))
+  const grnSerialNumbers = uniqueSerialNumbers(grnItem.serialNumbers)
+  const missingSerialNumbers = grnSerialNumbers.filter((serialNumber) => !transferredSerialNumbers.includes(serialNumber))
+  const extraSerialNumbers = transferredSerialNumbers.filter((serialNumber) => !grnSerialNumbers.includes(serialNumber))
+  if (missingSerialNumbers.length > 0 || extraSerialNumbers.length > 0) {
+    throw Object.assign(new Error(`411 transferred serial numbers do not match the GRN serial numbers.`), {
+      statusCode: 400,
+      detail: {
+        missingSerialNumbers,
+        extraSerialNumbers,
+        transferDocument: transferDocument.body,
+      },
+    })
+  }
+
+  return buildTransferPostingDetails(materialDocument, transferDocument.items, grnItem)
+}
+
+const transferProjectStock = async (request) => {
+  const payload = await readJson(request)
+  const { goodsIssue: requestedGoodsIssue = {} } = payload
+  const grn = await getGrnDetails(requestedGoodsIssue.GrnNumber)
+  const grnItems = grn.items?.length ? grn.items : [grn]
+  if (grnItems.length > 1) {
+    throw Object.assign(new Error('Project stock transfer is supported only for single-item manual GRNs.'), {
+      statusCode: 400,
+    })
+  }
+
+  const grnItem = applyManualGoodsIssueValues(grnItems[0], requestedGoodsIssue, true)
+  if (!isProjectStockItem(grnItem)) {
+    throw Object.assign(new Error('Transfer Project Stock is available only when InventorySpecialStockType is Q.'), {
+      statusCode: 400,
+    })
+  }
+
+  const projectStockTransferPayload = grnItem.serialNumbers.length === 0
+    ? buildNonSerialProjectStockTransferPayload({ grnItem, parseSapDate, toODataV2Date })
+    : buildProjectStockTransferPayload(grnItem)
+  const projectStockTransferResponse = await sapRequest(ENDPOINTS.goodsIssue, 'POST', projectStockTransferPayload)
+  const materialDocument = extractMaterialDocumentNumber(projectStockTransferResponse)
+  if (!materialDocument) {
+    throw Object.assign(new Error('411 transfer was posted, but SAP did not return a MaterialDocument.'), {
+      statusCode: 502,
+      detail: projectStockTransferResponse,
+    })
+  }
+
+  const transferPosting = await assertProjectStockTransferReady(grnItem, materialDocument)
+  return {
+    transferPosting,
+    projectStockTransferPayload,
+    projectStockTransferResponse,
+  }
+}
+
 const processGrnItem = async (grnItem, options = {}) => {
-  const { asset: requestedAsset, resumeAssetNumbers = [], persistProgress = false, preserveManualAsset = false } = options
+  const {
+    asset: requestedAsset,
+    resumeAssetNumbers = [],
+    persistProgress = false,
+    preserveManualAsset = false,
+    skipProjectStockTransfer = false,
+    goodsIssueItem = grnItem,
+  } = options
   const { productGroup, assetClass } = preserveManualAsset && required(requestedAsset?.AssetClass)
     ? { productGroup: grnItem.productGroup || '', assetClass: String(requestedAsset.AssetClass) }
     : await getAssetClassMappingForGrnItem(grnItem)
@@ -1098,6 +1360,29 @@ const processGrnItem = async (grnItem, options = {}) => {
     },
     asset,
   })
+
+  // Serial-managed processing remains below.  Non-serial materials are handled
+  // by the isolated module so they never enter the serial loop or validation.
+  if (grnItem.serialNumbers.length === 0) {
+    return createSingleAssetForNonSerial({
+      grnItem,
+      goodsIssueItem,
+      asset,
+      productGroup,
+      assetClass,
+      resumeAssetNumbers,
+      persistProgress,
+      buildAssetPayload,
+      extractAssetNumber,
+      sapRequest,
+      fixedAssetCreateEndpoint: ENDPOINTS.fixedAssetCreate,
+      fixedAssetCollectionEndpoint: ENDPOINTS.fixedAssetCollection,
+      goodsIssueEndpoint: ENDPOINTS.goodsIssue,
+      updateProcessedItem,
+      parseSapDate,
+      toODataV2Date,
+    })
+  }
 
   if (resumeAssetNumbers.length > grnItem.quantity) {
     throw Object.assign(new Error(`Recovery asset count is greater than the GRN item quantity for ${grnItem.key}.`), {
@@ -1150,20 +1435,32 @@ const processGrnItem = async (grnItem, options = {}) => {
   }
 
   const assetNumbers = createdAssets.map((item) => item.masterFixedAsset)
+  let projectStockTransferPayload
+  let projectStockTransferResponse
+  if (isProjectStockItem(grnItem) && !skipProjectStockTransfer) {
+    projectStockTransferPayload = buildProjectStockTransferPayload(grnItem)
+    try {
+      projectStockTransferResponse = await sapRequest(ENDPOINTS.goodsIssue, 'POST', projectStockTransferPayload)
+    } catch (error) {
+      error.partialResult = { assetNumbers, serialNumbers: grnItem.serialNumbers }
+      throw error
+    }
+  }
+
   const goodsIssuePayload = buildGoodsIssuePayload(
     {
       GoodsMovementCode: grnItem.goodsMovementCode || '03',
       MaterialDocumentHeaderText: grnItem.materialDocumentHeaderText || '',
       PostingDate: grnItem.postingDate,
       DocumentDate: grnItem.documentDate,
-      Material: grnItem.material,
-      Plant: grnItem.plant,
-      StorageLocation: grnItem.storageLocation,
+      Material: goodsIssueItem.material,
+      Plant: goodsIssueItem.plant,
+      StorageLocation: goodsIssueItem.storageLocation,
       GoodsMovementType: grnItem.goodsMovementType || '241',
-      EntryUnit: grnItem.entryUnit || 'EA',
+      EntryUnit: goodsIssueItem.entryUnit || 'EA',
     },
     assetNumbers,
-    grnItem.serialNumbers,
+    goodsIssueItem.serialNumbers,
   )
   let goodsIssueResponse
   try {
@@ -1184,6 +1481,8 @@ const processGrnItem = async (grnItem, options = {}) => {
     assetNumbers,
     serialNumbers: grnItem.serialNumbers,
     createdAssets,
+    projectStockTransferPayload,
+    projectStockTransferResponse,
     goodsIssuePayload,
     goodsIssueResponse,
   }
@@ -1203,6 +1502,10 @@ const applyManualGoodsIssueValues = (grnItem, goodsIssue, includeItemValues) => 
     plant: required(goodsIssue?.Plant) ? goodsIssue.Plant : grnItem.plant,
     storageLocation: required(goodsIssue?.StorageLocation) ? goodsIssue.StorageLocation : grnItem.storageLocation,
     entryUnit: required(goodsIssue?.EntryUnit) ? goodsIssue.EntryUnit : grnItem.entryUnit,
+    inventorySpecialStockType: required(goodsIssue?.InventorySpecialStockType)
+      ? String(goodsIssue.InventorySpecialStockType).trim()
+      : grnItem.inventorySpecialStockType,
+    wbsElement: required(goodsIssue?.WBSElement) ? goodsIssue.WBSElement : grnItem.wbsElement,
   }
 
   if (includeItemValues) {
@@ -1239,10 +1542,26 @@ const orchestrate = async (request) => {
   for (const [index, grnItem] of grnItems.entries()) {
     const manualGrnItem = applyManualGoodsIssueValues(grnItem, requestedGoodsIssue, grnItems.length === 1)
     try {
+      let goodsIssueItem = manualGrnItem
+      if (isProjectStockItem(manualGrnItem) && !payload.projectStockTransferCompleted) {
+        throw Object.assign(new Error('Post the 411 Project Stock transfer before creating assets for special stock Q.'), {
+          statusCode: 400,
+        })
+      }
+      if (isProjectStockItem(manualGrnItem) && payload.projectStockTransferCompleted) {
+        const transferPosting = await assertProjectStockTransferReady(
+          manualGrnItem,
+          payload.projectStockTransferMaterialDocument,
+        )
+        goodsIssueItem = buildUnrestrictedGoodsIssueItem(manualGrnItem, transferPosting)
+      }
+
       const result = await processGrnItem(manualGrnItem, {
         asset,
         resumeAssetNumbers: index === 0 ? resumeAssetNumbers : [],
         preserveManualAsset: true,
+        skipProjectStockTransfer: isProjectStockItem(manualGrnItem) && payload.projectStockTransferCompleted,
+        goodsIssueItem,
       })
       await writeCboProcessLog({
         grnItem: manualGrnItem,
@@ -1276,6 +1595,8 @@ const orchestrate = async (request) => {
     return {
       ...response,
       createdAssets: results[0].createdAssets,
+      projectStockTransferPayload: results[0].projectStockTransferPayload,
+      projectStockTransferResponse: results[0].projectStockTransferResponse,
       goodsIssuePayload: results[0].goodsIssuePayload,
       goodsIssueResponse: results[0].goodsIssueResponse,
       productGroup: results[0].productGroup,
@@ -1668,6 +1989,19 @@ const server = http.createServer(async (request, response) => {
       sendJson(response, error.statusCode || 500, {
         error: error.message,
         detail: error.detail,
+      })
+    }
+    return
+  }
+
+  if (request.method === 'POST' && pathname === '/api/transfer-project-stock') {
+    try {
+      sendJson(response, 200, await transferProjectStock(request))
+    } catch (error) {
+      sendJson(response, error.statusCode || 500, {
+        error: error.message,
+        detail: error.detail,
+        failedPayload: error.failedPayload,
       })
     }
     return

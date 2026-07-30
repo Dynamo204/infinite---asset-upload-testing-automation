@@ -3,6 +3,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
+const readJsonResponse = async (response) => {
+  const text = await response.text()
+  if (!text) return {}
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    throw new Error(`Server returned an invalid JSON response (${response.status}).`)
+  }
+}
+
 const initialGoodsIssue = {
   GrnNumber: '',
   ProductGroup: '',
@@ -138,6 +149,8 @@ function App() {
   const [resumeAssetNumbers, setResumeAssetNumbers] = useState([])
   const [projectStockReadOnly, setProjectStockReadOnly] = useState(true)
   const [grnLoading, setGrnLoading] = useState(false)
+  const [transferLoading, setTransferLoading] = useState(false)
+  const [projectStockTransfer, setProjectStockTransfer] = useState(null)
   /* AUTOMATION DISABLED: Uncomment this block to restore automatic GRN processing.
   const [todayGrns, setTodayGrns] = useState([])
   const [automaticallyProcessed, setAutomaticallyProcessed] = useState([])
@@ -154,6 +167,12 @@ function App() {
 
   const assetNumbers = useMemo(() => result?.assetNumbers || [], [result])
   const serialNumbers = useMemo(() => parseSerialNumbers(goodsIssue.SerialNumbers), [goodsIssue.SerialNumbers])
+  const isProjectStock = String(goodsIssue.InventorySpecialStockType || '').trim().toUpperCase() === 'Q'
+  const projectStockTransferCompleted = Boolean(projectStockTransfer?.transferPosting?.materialDocument)
+  const createDisabled = status.type === 'running'
+    || grnLoading
+    || transferLoading
+    || (isProjectStock && !projectStockTransferCompleted)
 
   const applyGrnDetails = (body) => {
     const items = Array.isArray(body.items) ? body.items : []
@@ -210,24 +229,37 @@ function App() {
     }
 
     setGrnLoading(true)
+    setResult(null)
+    setErrorDetail(null)
+    setProjectStockTransfer(null)
+    setResumeAssetNumbers([])
     try {
       //const response = await fetch(`${API_BASE_URL}/api/grn-details`, {
-        const response = await fetch(`http://localhost:4000/api/grn-details`, {
+        const response = await fetch(`/api/grn-details`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ grnNumber: goodsIssue.GrnNumber }),
       })
-      const body = await response.json()
+      const body = await readJsonResponse(response)
       if (!response.ok) {
         throw new Error(body.error || 'Could not fetch GRN details.')
       }
 
+      const fetchedSerialNumbers = body.serialNumbers?.length
+        ? body.serialNumbers
+        : (body.items || []).flatMap((item) => item.serialNumbers || [])
       applyGrnDetails(body)
       const fetchedQuantity = body.quantity ?? (body.items || []).reduce(
         (total, item) => total + Number(item.quantity || 0),
         0,
       )
-      setStatus({ type: 'success', message: `Loaded GRN ${body.grnNumber}: ${fetchedQuantity} serial-managed item(s).` })
+      const stockType = String(body.inventorySpecialStockType || body.items?.[0]?.inventorySpecialStockType || '').trim()
+      setStatus({
+        type: 'success',
+        message: fetchedSerialNumbers.length === 0
+          ? `Loaded GRN ${body.grnNumber}\n\nNo serial numbers maintained for this GRN.\n\nQuantity: ${fetchedQuantity}\n\nOne Fixed Asset will be created for the total quantity.`
+          : `Loaded GRN ${body.grnNumber}\n\n${fetchedSerialNumbers.length} serial numbers found for this GRN.\n\nAsset creation will be done for each serial number.${stockType === 'Q' ? '\n\nPost the 411 Project Stock transfer before creating assets.' : ''}`,
+      })
     } catch (error) {
       setStatus({ type: 'warning', message: error.message })
     } finally {
@@ -244,7 +276,7 @@ function App() {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
       })
-      const body = await response.json()
+      const body = await readJsonResponse(response)
       if (!response.ok) throw new Error(body.error || 'Could not fetch today GRNs.')
       setTodayGrns(body.items || [])
       setAutomaticallyProcessed(body.automaticallyProcessed || [])
@@ -268,7 +300,23 @@ function App() {
   }, [getTodayGrns])
   */
 
-  const setGoods = (field, value) => setGoodsIssue((current) => ({ ...current, [field]: value }))
+  const setGoods = (field, value) => {
+    const transferSensitiveFields = new Set([
+      'GrnNumber',
+      'PostingDate',
+      'DocumentDate',
+      'Material',
+      'Plant',
+      'StorageLocation',
+      'WBSElement',
+      'InventorySpecialStockType',
+      'EntryUnit',
+      'QuantityInEntryUnit',
+      'SerialNumbers',
+    ])
+    if (transferSensitiveFields.has(field)) setProjectStockTransfer(null)
+    setGoodsIssue((current) => ({ ...current, [field]: value }))
+  }
   const setAssetTop = (field, value) => setAsset((current) => ({ ...current, [field]: value }))
   const setAssetSection = (section, field, value) =>
     setAsset((current) => ({ ...current, [section]: { ...current[section], [field]: value } }))
@@ -308,6 +356,7 @@ function App() {
     setGrnInfo((current) => ({ ...current, [field]: value }))
   const setFirstSerialNumber = (value) => {
     setAssetSection('_General', 'AssetSerialNumber', value)
+    setProjectStockTransfer(null)
     setGoodsIssue((current) => {
       const values = parseSerialNumbers(current.SerialNumbers)
       if (values.length > 0) values[0] = value
@@ -315,34 +364,104 @@ function App() {
       return { ...current, SerialNumbers: values.join('\n') }
     })
   }
+  const transferProjectStock = async () => {
+    setErrorDetail(null)
+    setTransferLoading(true)
+    setProjectStockTransfer(null)
+    setStatus({ type: 'running', message: 'Posting the 411 Project Stock transfer...' })
+
+    try {
+      const response = await fetch(`/api/transfer-project-stock`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ goodsIssue }),
+      })
+      const body = await readJsonResponse(response)
+
+      if (!response.ok) {
+        const error = new Error(body.error || 'Project stock transfer failed.')
+        error.detail = body.detail
+        error.failedPayload = body.failedPayload
+        throw error
+      }
+
+      setProjectStockTransfer(body)
+      setStatus({
+        type: 'success',
+        message: `411 transfer posted. Material Document ${body.transferPosting?.materialDocument || ''} is ready for review.`,
+      })
+    } catch (error) {
+      setStatus({ type: 'error', message: error.message })
+      setErrorDetail({
+        detail: error.detail,
+        failedPayload: error.failedPayload,
+      })
+    } finally {
+      setTransferLoading(false)
+    }
+  }
   const createAll = async () => {
     setResult(null)
     setErrorDetail(null)
+
+    if (isProjectStock && !projectStockTransferCompleted) {
+      setStatus({
+        type: 'warning',
+        message: 'Post and review the 411 Project Stock transfer before creating assets.',
+      })
+      return
+    }
 
     if (goodsIssue.GoodsMovementType === '241' && !goodsIssue.MasterFixedAsset.trim()) {
       window.alert('Asset number is mandatory for movement type 241. The created asset number will be assigned automatically.')
     }
 
-    const quantity = Number(goodsIssue.QuantityInEntryUnit)
-    if (!Number.isInteger(quantity) || quantity < 1 || serialNumbers.length !== quantity) {
-      setStatus({
-        type: 'warning',
-        message: 'Fetch a GRN with one serial number for each unit before creating assets.',
-      })
-      return
-    }
+    // const quantity = Number(goodsIssue.QuantityInEntryUnit)
+    // if (!Number.isInteger(quantity) || quantity < 1 || serialNumbers.length !== quantity) {
+    //   setStatus({
+    //     type: 'warning',
+    //     message: 'Fetch a GRN with one serial number for each unit before creating assets.',
+    //   })
+    //   return
+    // }
 
-    setStatus({ type: 'running', message: 'Creating assets and posting the 241 goods issue...' })
+    const quantity = Number(goodsIssue.QuantityInEntryUnit)
+const isNonSerial = serialNumbers.length === 0
+
+if (
+  !Number.isInteger(quantity) ||
+  quantity < 1 ||
+  (!isNonSerial && serialNumbers.length !== quantity)
+) {
+  setStatus({
+    type: 'warning',
+    message: 'Fetch a GRN with one serial number for each unit before creating assets.',
+  })
+  return
+}
+
+    setStatus({
+      type: 'running',
+      message: serialNumbers.length === 0
+        ? 'Creating asset and posting the full GRN quantity...'
+        : 'Creating assets and posting the 241 goods issue...',
+    })
 
     try {
       //const response = await fetch(`${API_BASE_URL}/api/create-goods-issue-with-assets`, {
-       const response = await fetch(`http://localhost:4000/api/create-goods-issue-with-assets`, {
+       const response = await fetch(`/api/create-goods-issue-with-assets`, {
 
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ goodsIssue, asset, resumeAssetNumbers }),
+        body: JSON.stringify({
+          goodsIssue,
+          asset,
+          resumeAssetNumbers,
+          projectStockTransferCompleted: isProjectStock && projectStockTransferCompleted,
+          projectStockTransferMaterialDocument: projectStockTransfer?.transferPosting?.materialDocument || '',
+        }),
       })
-      const body = await response.json()
+      const body = await readJsonResponse(response)
 
       if (!response.ok) {
         const error = new Error(body.error || 'Create process failed.')
@@ -357,7 +476,9 @@ function App() {
       setGoodsIssue((current) => ({ ...current, MasterFixedAsset: body.assetNumbers.join(', ') }))
       setStatus({
         type: 'success',
-        message: `Created ${body.assetNumbers.length} assets and posted the goods issue.`,
+        message: body.serialNumbers?.length === 0
+          ? 'Asset created successfully. The total GRN quantity and value were posted to one asset.'
+          : `${body.assetNumbers.length} assets created successfully.`,
       })
       setActiveTab('manualGoods')
     } catch (error) {
@@ -436,7 +557,7 @@ function App() {
               </button>
             ) : null}
             {isManualPage ? (
-              <button className="primary" type="button" onClick={createAll} disabled={status.type === 'running' || grnLoading}>
+              <button className="primary" type="button" onClick={createAll} disabled={createDisabled}>
                 {status.type === 'running' ? 'Creating...' : grnLoading ? 'Fetching GRN...' : 'Create Assets'}
               </button>
             ) : null}
@@ -521,6 +642,23 @@ function App() {
               <Field label="Serial Numbers" value={goodsIssue.SerialNumbers} onChange={(value) => setGoods('SerialNumbers', value)} required multiline />
             </div>
             {grnInfo.mappingError ? <div className="inline-warning">{grnInfo.mappingError}</div> : null}
+            {isProjectStock ? (
+              <div className="project-stock-actions">
+                <div>
+                  <p className="eyebrow">Project Stock</p>
+                  <h2>Transfer Project Stock</h2>
+                  <p className="subtle">Post movement type 411 and review the resulting material document before asset creation.</p>
+                </div>
+                <button
+                  className="primary"
+                  type="button"
+                  onClick={transferProjectStock}
+                  disabled={transferLoading || grnLoading || status.type === 'running'}
+                >
+                  {transferLoading ? 'Posting 411...' : projectStockTransferCompleted ? 'Repost 411 Transfer' : 'Transfer Project Stock (411)'}
+                </button>
+              </div>
+            ) : null}
           </section>
         ) : null}
 
@@ -694,6 +832,30 @@ function App() {
               <Field label="Useful Life Years" value={asset._Ledger[0]._Valuation[0]._TimeBasedValuation[0].PlannedUsefulLifeInYears} onChange={(value) => setTimeValuation('PlannedUsefulLifeInYears', value)} />
             </div>
 
+          </section>
+        ) : null}
+
+        {projectStockTransferCompleted ? (
+          <section className="result transfer-result">
+            <h2>Transfer Posting Details</h2>
+            <div className="detail-grid">
+              <span>Movement Type</span>
+              <strong>{projectStockTransfer.transferPosting.movementType}</strong>
+              <span>Material Document</span>
+              <strong>{projectStockTransfer.transferPosting.materialDocument}</strong>
+              <span>Material</span>
+              <strong>{projectStockTransfer.transferPosting.material || '-'}</strong>
+              <span>Plant</span>
+              <strong>{projectStockTransfer.transferPosting.plant || '-'}</strong>
+              <span>Storage Location</span>
+              <strong>{projectStockTransfer.transferPosting.storageLocation || '-'}</strong>
+              <span>Quantity</span>
+              <strong>{projectStockTransfer.transferPosting.quantity} {projectStockTransfer.transferPosting.entryUnit || ''}</strong>
+              <span>Serial Numbers</span>
+              <strong>{projectStockTransfer.transferPosting.serialNumbers?.join(', ') || '-'}</strong>
+              <span>Posting Date</span>
+              <strong>{projectStockTransfer.transferPosting.postingDate || '-'}</strong>
+            </div>
           </section>
         ) : null}
 
